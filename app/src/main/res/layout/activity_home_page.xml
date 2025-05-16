@@ -85,7 +85,7 @@
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
-    <!-- Content Area -->
+    <!-- content Area -->
     <LinearLayout
         android:id="@+id/content_area"
         android:layout_width="0dp"
