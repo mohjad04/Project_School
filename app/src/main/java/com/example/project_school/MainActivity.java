@@ -17,12 +17,14 @@ import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.nio.charset.StandardCharsets;
+import com.google.common.hash.Hashing;
+
 
 public class MainActivity extends AppCompatActivity {
 
@@ -49,7 +51,8 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String user = username.getText().toString();
                 String pass = password.getText().toString();
-                String url = "http://10.0.2.2:80/project_school/getUser.php?user_id=" + user;
+                String hashedUserID = Hashing.sha256().hashString(user, StandardCharsets.UTF_8).toString();
+                String url = "http://10.0.2.2:80/project_school/getUser.php?user_id=" + hashedUserID;
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,
                         null,
                         new Response.Listener<JSONObject>() {
