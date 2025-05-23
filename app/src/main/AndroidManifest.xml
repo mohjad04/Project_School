@@ -17,6 +17,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".studentSchedule"
+            android:exported="false" />
+        <activity
             android:name=".addTeacher"
             android:exported="false" />
         <activity

@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Welcome back!!!"
+            android:text="Welcome Student !!!"
             android:textColor="#FFFFFF"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -120,18 +120,18 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="Courses"
-                    android:src="@drawable/ic_course" />
+                    android:src="@drawable/schedule" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Courses"
+                    android:text="My Schedule"
                     android:textColor="#000"
                     android:textSize="14sp" />
 
                 <android.widget.Button
-                android:id="@+id/Courses"
+                    android:id="@+id/mySchduleBtn"
                     android:layout_width="130dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="8dp"
@@ -139,10 +139,9 @@
                     android:textAllCaps="false"
                     android:textColor="#FFFFFF"
                     android:background="@drawable/button_rounded_blue"
-                    android:backgroundTint="@null" />
+                     />
             </LinearLayout>
 
-            <!-- Quiz Button -->
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -157,19 +156,19 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="Quiz"
-                    android:src="@drawable/ic_quiz" />
+                    android:src="@drawable/goodmark" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Quiz"
+                    android:text="My Marks"
                     android:textColor="#000"
                     android:textSize="14sp" />
 
                 <android.widget.Button
 
-                android:id="@+id/Quiz"
+                    android:id="@+id/myMarksBtn"
                     android:layout_width="130dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="8dp"
@@ -179,6 +178,82 @@
                     android:background="@drawable/button_rounded_blue"
                     android:backgroundTint="@null" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:background="#E3EDF0"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="Assignment"
+                    android:src="@drawable/assignment" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Assignments"
+                    android:textColor="#000"
+                    android:textSize="14sp" />
+
+                <android.widget.Button
+
+                    android:id="@+id/myAssignmentsBtn"
+                    android:layout_width="130dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:text="View"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/button_rounded_blue"
+                    android:backgroundTint="@null" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:background="#E3EDF0"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="Assignment"
+                    android:src="@drawable/course" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Courses"
+                    android:textColor="#000"
+                    android:textSize="14sp" />
+
+                <android.widget.Button
+
+                    android:id="@+id/myCoursesBtn"
+                    android:layout_width="130dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:text="View"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/button_rounded_blue"
+                    android:backgroundTint="@null" />
+            </LinearLayout>
+
+
+
         </GridLayout>
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
