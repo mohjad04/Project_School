@@ -19,12 +19,11 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.google.common.hash.Hashing;
 
 import org.json.JSONObject;
 
 import java.nio.charset.StandardCharsets;
-import com.google.common.hash.Hashing;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,9 +41,7 @@ public class MainActivity extends AppCompatActivity {
         login = findViewById(R.id.loginButton);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
-
         queue = Volley.newRequestQueue(this);
-
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -52,7 +49,8 @@ public class MainActivity extends AppCompatActivity {
                 String user = username.getText().toString();
                 String pass = password.getText().toString();
                 String hashedUserID = Hashing.sha256().hashString(user, StandardCharsets.UTF_8).toString();
-                String url = "https://566e-103-27-146-234.ngrok-free.app/getUser.php?user_id=" + hashedUserID;
+                String url = "https://d308-103-27-146-234.ngrok-free.app/getUser.php?user_id=" + hashedUserID;
+
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,
                         null,
                         new Response.Listener<JSONObject>() {
@@ -63,9 +61,28 @@ public class MainActivity extends AppCompatActivity {
                                     if (!isError) {
                                         JSONObject user = response.getJSONObject("user");
                                         String pass_db = user.getString("password");
+
                                         if (pass.equals(pass_db)) {
                                             String name = user.getString("name");
-                                            Intent intent = new Intent(MainActivity.this, HomePage.class);
+                                            String role = user.getString("role"); // make sure this is returned from API
+
+                                            Intent intent;
+
+                                            switch (role.toLowerCase()) {
+                                                case "student":
+                                                    intent = new Intent(MainActivity.this, HomePage.class);
+                                                    break;
+                                                case "registrar":
+                                                    intent = new Intent(MainActivity.this, RegHome.class);
+                                                    break;
+                                                case "teacher":
+                                                    intent = new Intent(MainActivity.this, TeacherHome.class);
+                                                    break;
+                                                default:
+                                                    Log.d("Login", "Unknown role: " + role);
+                                                    return;
+                                            }
+
                                             intent.putExtra("name", name);
                                             startActivity(intent);
                                         }
@@ -82,11 +99,10 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
                 );
+
                 queue.add(request);
             }
         });
-
-
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
