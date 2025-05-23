@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
                 String user = username.getText().toString();
                 String pass = password.getText().toString();
                 String hashedUserID = Hashing.sha256().hashString(user, StandardCharsets.UTF_8).toString();
-                String url = "http://10.0.2.2:80/project_school/getUser.php?user_id=" + hashedUserID;
+                String url = "https://566e-103-27-146-234.ngrok-free.app/getUser.php?user_id=" + hashedUserID;
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,
                         null,
                         new Response.Listener<JSONObject>() {
