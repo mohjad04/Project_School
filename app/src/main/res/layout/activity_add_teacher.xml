@@ -1,27 +1,141 @@
-<?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     tools:context=".addTeacher">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbarAddTeacher"
+    <!-- Back Button -->
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/backk"
+        android:contentDescription="Back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Add Teacher"
+        android:textSize="20dp"
+        android:textColor="#3fa9d1"
+        android:fontFamily="@font/dam"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Add Teacher Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/addTeacherCard"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/Blue"
-        android:elevation="4dp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"
+        android:background="@android:color/white"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:layout_constraintTop_toBottomOf="@id/title_text"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/back"
-        app:title="Add Teacher"
-        app:titleMarginStart="100dp"
-        app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
-        app:titleTextColor="@android:color/white" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <!-- Other content goes here -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:id="@+id/textView2"
+                style="@style/BasicText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Fill the form :"
+                android:textSize="24dp" />
+
+            <EditText
+                android:id="@+id/teacherName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edittext_background"
+                android:hint="Full Name"
+                android:inputType="textPersonName"
+                android:padding="12dp" />
+
+            <EditText
+                android:id="@+id/teacherEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/edittext_background"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:padding="12dp" />
+
+            <EditText
+                android:id="@+id/teacherPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/edittext_background"
+                android:hint="Phone Number"
+                android:inputType="phone"
+                android:padding="12dp" />
+
+            <Spinner
+                android:id="@+id/teacherLevelSpinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/edittext_background"
+                android:padding="12dp"
+                android:spinnerMode="dropdown" />
+
+            <EditText
+                android:id="@+id/teacherSubject"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/edittext_background"
+                android:hint="Subject"
+                android:inputType="text"
+                android:padding="12dp" />
+
+            <EditText
+                android:id="@+id/teacherSalary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/edittext_background"
+                android:hint="Salary"
+                android:inputType="numberDecimal"
+                android:padding="12dp" />
+
+            <Button
+                android:id="@+id/submitTeacherButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:layout_gravity="center"
+                android:backgroundTint="#59bfe5"
+                android:fontFamily="@font/dam"
+                android:text="Add"
+                android:textColor="@android:color/white"
+                android:textSize="20dp" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

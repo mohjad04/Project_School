@@ -92,10 +92,10 @@ public class addStudent extends AppCompatActivity {
             int day = calendar.get(Calendar.DAY_OF_MONTH);
 
             DatePickerDialog datePickerDialog = new DatePickerDialog(this, (view, year1, month1, dayOfMonth) -> {
-                // Format: year-day-month
-                String date = String.format(Locale.getDefault(), "%d-%02d-%02d", year1, dayOfMonth, month1 + 1);
+                // Format: year-month-day
+                String date = String.format(Locale.getDefault(), "%d-%02d-%02d", year1, month1 + 1, dayOfMonth);
                 studentDob.setText(date);
-            }, year, month, day);
+            }, year, month, day); // Note: order here is year, month, day
 
             Calendar minDate = Calendar.getInstance();
             minDate.set(currentYear - 18, Calendar.JANUARY, 1);
@@ -108,14 +108,14 @@ public class addStudent extends AppCompatActivity {
         });
     }
 
+
     private void submitStudentData() {
         String name = studentName.getText().toString();
         String email = studentEmail.getText().toString();
         String dob = studentDob.getText().toString();
         String phone = studentPhone.getText().toString();
         String studentClass = studentClassSpinner.getSelectedItem().toString();
-
-        String url = "https://d308-103-27-146-234.ngrok-free.app/addUser.php"; // Replace with your URL
+        String url = getString(R.string.URL)+"addUser.php";
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 response -> Toast.makeText(this, "Student added successfully!", Toast.LENGTH_SHORT).show(),
@@ -133,12 +133,17 @@ public class addStudent extends AppCompatActivity {
                 params.put("name", name);
                 params.put("email", email);
                 params.put("date_of_birth", dob);
-                Log.d("tag" , dob);
 //                params.put("phone", phone);
 //                params.put("student_class", studentClass);
-                params.put("password","123");
+                params.put("password",name);
                 params.put("role","student");
                 return params;
+            }
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/x-www-form-urlencoded");
+                return headers;
             }
         };
 
