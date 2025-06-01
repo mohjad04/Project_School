@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
-    tools:context=".addStudent">
+    tools:context=".addStudent2">
 
     <!-- Back Button -->
     <ImageView
@@ -66,29 +66,30 @@
                 android:textSize="24dp" />
 
             <EditText
-                android:id="@+id/studentName"
+                android:id="@+id/studentPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/edittext_background"
+                android:hint="Password"
                 android:textColor="#000000"
-                android:hint="Full Name"
                 android:inputType="textPersonName"
                 android:padding="12dp" />
 
             <EditText
-                android:id="@+id/studentEmail"
+                android:id="@+id/studentAddress"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:background="@drawable/edittext_background"
                 android:textColor="#000000"
-                android:hint="Email"
-                android:inputType="textEmailAddress"
+                android:background="@drawable/edittext_background"
+                android:hint="Address"
                 android:padding="12dp" />
 
+
+
             <Spinner
-                android:id="@+id/studentClassSpinner"
+                android:id="@+id/studentClassBransh"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
@@ -98,7 +99,7 @@
 
 
             <Spinner
-                android:id="@+id/studentGender"
+                android:id="@+id/studentBloodGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
@@ -107,27 +108,25 @@
                 android:spinnerMode="dropdown" />
 
             <EditText
-                android:id="@+id/studentDob"
+                android:id="@+id/studentMedicalState"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:focusable="false"
                 android:textColor="#000000"
-                android:clickable="true"
                 android:background="@drawable/edittext_background"
-                android:hint="Date of Birth"
+                android:hint="Medical State"
                 android:padding="12dp" />
 
             <EditText
-                android:id="@+id/studentPhone"
+                android:id="@+id/studentPreviousSchool"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:background="@drawable/edittext_background"
-                android:hint="Student's Phone"
                 android:textColor="#000000"
-                android:inputType="phone"
+                android:background="@drawable/edittext_background"
+                android:hint="Previous School Name"
                 android:padding="12dp" />
+
 
             <!-- Add Button moved inside the card -->
             <Button
@@ -138,7 +137,7 @@
                 android:layout_gravity="center"
                 android:backgroundTint="#59bfe5"
                 android:fontFamily="@font/dam"
-                android:text="Next"
+                android:text="Add"
                 android:textColor="@android:color/white"
                 android:textSize="20dp" />
 

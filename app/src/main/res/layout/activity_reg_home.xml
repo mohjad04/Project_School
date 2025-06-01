@@ -100,7 +100,7 @@
 
         <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="458dp"
             android:columnCount="2"
             android:rowCount="2"
             android:useDefaultMargins="true">
@@ -135,11 +135,11 @@
                     android:layout_width="130dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="8dp"
+                    android:background="@drawable/button_rounded_blue"
+                    android:backgroundTint="@null"
                     android:text="View"
                     android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:background="@drawable/button_rounded_blue"
-                    android:backgroundTint="@null" />
+                    android:textColor="#FFFFFF" />
             </LinearLayout>
 
             <LinearLayout
@@ -172,11 +172,11 @@
                     android:layout_width="130dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="8dp"
+                    android:background="@drawable/button_rounded_blue"
+                    android:backgroundTint="@null"
                     android:text="View"
                     android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
-                    android:background="@drawable/button_rounded_blue"
-                    android:backgroundTint="@null" />
+                    android:textColor="#FFFFFF" />
             </LinearLayout>
 
             <LinearLayout
@@ -209,11 +209,122 @@
                     android:layout_width="130dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="8dp"
+                    android:background="@drawable/button_rounded_blue"
+                    android:backgroundTint="@null"
                     android:text="View"
                     android:textAllCaps="false"
-                    android:textColor="#FFFFFF"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:background="#E3EDF0"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="Add Parent"
+                    android:src="@drawable/parents" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Add Parent"
+                    android:textColor="#000"
+                    android:textSize="14sp" />
+
+                <android.widget.Button
+
+                    android:id="@+id/addparentbtn"
+                    android:layout_width="130dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
                     android:background="@drawable/button_rounded_blue"
-                    android:backgroundTint="@null" />
+                    android:backgroundTint="@null"
+                    android:text="View"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:background="#E3EDF0"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="new year-semester"
+                    android:src="@drawable/year" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="New Year-Semester"
+                    android:textColor="#000"
+                    android:textSize="14sp" />
+
+                <android.widget.Button
+
+                    android:id="@+id/newyearbtn"
+                    android:layout_width="130dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/button_rounded_blue"
+                    android:backgroundTint="@null"
+                    android:text="View"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:background="#E3EDF0"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="class room"
+                    android:src="@drawable/classroom" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="Classes Manegment"
+                    android:textColor="#000"
+                    android:textSize="14sp" />
+
+                <android.widget.Button
+
+                    android:id="@+id/classroombtn"
+                    android:layout_width="130dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:background="@drawable/button_rounded_blue"
+                    android:backgroundTint="@null"
+                    android:text="View"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF" />
             </LinearLayout>
         </GridLayout>
     </LinearLayout>

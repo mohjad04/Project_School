@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private EditText username;
     private EditText password;
     private RequestQueue queue;
+    public static String token;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,56 +49,40 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String user = username.getText().toString();
                 String pass = password.getText().toString();
-                String hashedUserID = Hashing.sha256().hashString(user, StandardCharsets.UTF_8).toString();
-                String url = getString(R.string.URL)+"getUser.php?user_id=" + hashedUserID;
 
-                JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url,
-                        null,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                try {
-                                    boolean isError = response.getBoolean("error");
-                                    if (!isError) {
-                                        JSONObject user = response.getJSONObject("user");
-                                        String pass_db = user.getString("password");
+                String url = getString(R.string.URL) + "auth/login.php";
+                JSONObject body = new JSONObject();
+                try {
+                    body.put("user_id", user);
+                    body.put("password", pass);
+                } catch (Exception e) { e.printStackTrace(); }
 
-                                        if (pass.equals(pass_db)) {
-                                            String name = user.getString("name");
-                                            String role = user.getString("role"); // make sure this is returned from API
+                JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
+                        response -> {
+                            try {
+                                JSONObject data = response.getJSONObject("data");
+                                JSONObject userObj = data.getJSONObject("user");
+                                String role = userObj.getString("role");
+                                MainActivity.token = data.getString("token");
 
-                                            Intent intent;
-
-                                            switch (role.toLowerCase()) {
-                                                case "student":
-                                                    intent = new Intent(MainActivity.this, HomePage.class);
-                                                    break;
-                                                case "registrar":
-                                                    intent = new Intent(MainActivity.this, RegHome.class);
-                                                    break;
-                                                case "teacher":
-                                                    intent = new Intent(MainActivity.this, TeacherHome.class);
-                                                    break;
-                                                default:
-                                                    Log.d("Login", "Unknown role: " + role);
-                                                    return;
-                                            }
-
-                                            intent.putExtra("name", name);
-                                            startActivity(intent);
-                                        }
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                                Intent intent;
+                                switch (role.toLowerCase()) {
+                                    case "student":
+                                        intent = new Intent(MainActivity.this, HomePage.class); break;
+                                    case "registrar":
+                                        intent = new Intent(MainActivity.this, RegHome.class); break;
+                                    case "teacher":
+                                        intent = new Intent(MainActivity.this, TeacherHome.class); break;
+                                    default:
+                                        return;
                                 }
+                                intent.putExtra("name", userObj.getString("name"));
+                                startActivity(intent);
+                            } catch (Exception e) {
+                                e.printStackTrace();
                             }
                         },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
-                                Log.d("Error", error.toString());
-                            }
-                        }
+                        error -> Log.e("Volley", error.toString())
                 );
 
                 queue.add(request);

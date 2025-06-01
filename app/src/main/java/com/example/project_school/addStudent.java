@@ -1,6 +1,7 @@
 package com.example.project_school;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -32,7 +33,7 @@ import java.util.Map;
 public class addStudent extends AppCompatActivity {
 
     private EditText studentName, studentEmail, studentDob, studentPhone;
-    private Spinner studentClassSpinner;
+    private Spinner studentClassSpinner,studentGender;
     private Button submitStudentButton;
     private ImageView backButton;
     private TextView titleText;
@@ -56,7 +57,10 @@ public class addStudent extends AppCompatActivity {
 
         queue = Volley.newRequestQueue(this);
 
-        submitStudentButton.setOnClickListener(v -> submitStudentData());
+        submitStudentButton.setOnClickListener(v -> {
+            // Optional: validate input here
+            goToAddStudent2();
+        });
     }
 
     private void initViews() {
@@ -65,6 +69,7 @@ public class addStudent extends AppCompatActivity {
         studentDob = findViewById(R.id.studentDob);
         studentPhone = findViewById(R.id.studentPhone);
         studentClassSpinner = findViewById(R.id.studentClassSpinner);
+        studentGender = findViewById(R.id.studentGender);
         submitStudentButton = findViewById(R.id.submitStudentButton);
         backButton = findViewById(R.id.back_button);
         titleText = findViewById(R.id.title_text);
@@ -73,13 +78,21 @@ public class addStudent extends AppCompatActivity {
     private void setupClassSpinner() {
         String[] classes = {
                 "1st Grade", "2nd Grade", "3rd Grade", "4th Grade", "5th Grade",
-                "6th Grade", "7th Grade", "8th Grade", "9th Grade", "10th Grade",
+                "6th Grade", "7th Grade", "8th Grade", "9th Grade", "10",
                 "11th Grade", "Tawjihi (12th Grade)"
         };
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, classes);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         studentClassSpinner.setAdapter(adapter);
+
+        String[] genders = {
+                "Female", "Male"
+        };
+
+        ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, genders);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        studentGender.setAdapter(adapter2);
     }
 
     private void setupDobPicker() {
@@ -109,44 +122,23 @@ public class addStudent extends AppCompatActivity {
     }
 
 
-    private void submitStudentData() {
-        String name = studentName.getText().toString();
-        String email = studentEmail.getText().toString();
-        String dob = studentDob.getText().toString();
-        String phone = studentPhone.getText().toString();
+    private void goToAddStudent2() {
+        String name = studentName.getText().toString().trim();
+        String email = studentEmail.getText().toString().trim();
+        String dob = studentDob.getText().toString().trim();
+        String phone = studentPhone.getText().toString().trim();
         String studentClass = studentClassSpinner.getSelectedItem().toString();
-        String url = getString(R.string.URL)+"addUser.php";
+        String gender = studentGender.getSelectedItem().toString();
 
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
-                response -> Toast.makeText(this, "Student added successfully!", Toast.LENGTH_SHORT).show(),
-                error -> Toast.makeText(this, "Error: " + error.getMessage(), Toast.LENGTH_LONG).show()
-        ) {
-            @Override
-            public String getBodyContentType() {
-                // as we are passing data in the form of url encoded
-                // so we are passing the content type below
-                return "application/x-www-form-urlencoded; charset=UTF-8";
-            }
-            @Override
-            protected Map<String, String> getParams() {
-                Map<String, String> params = new HashMap<>();
-                params.put("name", name);
-                params.put("email", email);
-                params.put("date_of_birth", dob);
-//                params.put("phone", phone);
-//                params.put("student_class", studentClass);
-                params.put("password",name);
-                params.put("role","student");
-                return params;
-            }
-            @Override
-            public Map<String, String> getHeaders() {
-                Map<String, String> headers = new HashMap<>();
-                headers.put("Content-Type", "application/x-www-form-urlencoded");
-                return headers;
-            }
-        };
+        Intent intent = new Intent(addStudent.this, addStudent2.class);
+        intent.putExtra("name", name);
+        intent.putExtra("email", email);
+        intent.putExtra("dob", dob);
+        intent.putExtra("phone", phone);
+        intent.putExtra("class", studentClass);
+        intent.putExtra("gender", gender);
 
-        queue.add(postRequest);
+        startActivity(intent);
     }
+
 }
