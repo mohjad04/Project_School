@@ -5,4 +5,9 @@
         <item name="android:fontFamily">@font/dam</item>
         <item name="android:textColor">#3fa9d1</item>
     </style>
+
+    <style name="ToolbarTitleBold" parent="TextAppearance.Widget.AppCompat.Toolbar.Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">20sp</item> <!-- Optional: adjust size -->
+    </style>
 </resources>

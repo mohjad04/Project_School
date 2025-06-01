@@ -5,22 +5,39 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
     tools:context=".studentSchedule">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarSchedule"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/Blue"
         android:elevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navigationIcon="@drawable/back"
+        app:navigationIcon="@drawable/backk"
         app:title="Schedule"
         app:titleMarginStart="100dp"
-        app:titleTextAppearance="@style/TextAppearance.AppCompat.Large"
-        app:titleTextColor="@android:color/white" />
+        app:titleTextAppearance="@style/ToolbarTitleBold"
+        app:titleTextColor="#3fa9d1" />
+
+
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:stretchColumns="1,2,3,4,5,6"
+        android:layout_marginTop="68dp"
+
+        >
+
+    </TableLayout>
+
+
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
