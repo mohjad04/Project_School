@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -34,7 +35,7 @@ public class addStudent2 extends AppCompatActivity {
     private EditText studentPassword, studentAddress, studentMedicalState, studentPreviousSchool;
     private Spinner studentClassBranch, studentBloodGroup;
     private RequestQueue queue;
-
+    private Button submitStudentButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +55,7 @@ public class addStudent2 extends AppCompatActivity {
 
         queue = Volley.newRequestQueue(this);
         fetchBranchesFromApi(studentClass);
+        submitStudentButton.setOnClickListener(v -> submitStudentDataToServer());
 // Now you can use these values in addStudent2
 
 
@@ -71,6 +73,7 @@ public class addStudent2 extends AppCompatActivity {
         studentPreviousSchool = findViewById(R.id.studentPreviousSchool);
         studentClassBranch = findViewById(R.id.studentClassBransh);
         studentBloodGroup = findViewById(R.id.studentBloodGroup);
+        submitStudentButton = findViewById(R.id.submitStudentButton);
     }
     private void fetchBranchesFromApi(int classNum) {
         String url = getString(R.string.URL) + "classes/list.php?class_num=" + classNum;
@@ -172,7 +175,15 @@ public class addStudent2 extends AppCompatActivity {
                     Toast.makeText(this, "Error: " + error.toString(), Toast.LENGTH_LONG).show();
                     error.printStackTrace();
                 }
-        );
+        ) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Authorization", "Bearer " + MainActivity.token);
+                return headers;
+            }
+        };
 
         queue.add(request);
     }
