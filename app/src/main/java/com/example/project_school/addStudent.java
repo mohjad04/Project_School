@@ -29,6 +29,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class addStudent extends AppCompatActivity {
 
@@ -78,7 +80,7 @@ public class addStudent extends AppCompatActivity {
     private void setupClassSpinner() {
         String[] classes = {
                 "1st Grade", "2nd Grade", "3rd Grade", "4th Grade", "5th Grade",
-                "6th Grade", "7th Grade", "8th Grade", "9th Grade", "10",
+                "6th Grade", "7th Grade", "8th Grade", "9th Grade", "10th Grade",
                 "11th Grade", "Tawjihi (12th Grade)"
         };
 
@@ -128,6 +130,10 @@ public class addStudent extends AppCompatActivity {
         String dob = studentDob.getText().toString().trim();
         String phone = studentPhone.getText().toString().trim();
         String studentClass = studentClassSpinner.getSelectedItem().toString();
+        Pattern pattern = Pattern.compile("(\\d{1,2})");
+        Matcher matcher = pattern.matcher(studentClass);
+        matcher.find();
+        int number = Integer.parseInt(matcher.group(1));
         String gender = studentGender.getSelectedItem().toString();
 
         Intent intent = new Intent(addStudent.this, addStudent2.class);
@@ -135,7 +141,7 @@ public class addStudent extends AppCompatActivity {
         intent.putExtra("email", email);
         intent.putExtra("dob", dob);
         intent.putExtra("phone", phone);
-        intent.putExtra("class", studentClass);
+        intent.putExtra("class", number);
         intent.putExtra("gender", gender);
 
         startActivity(intent);

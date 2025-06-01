@@ -2,6 +2,7 @@ package com.example.project_school;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -23,10 +24,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class addStudent2 extends AppCompatActivity {
 
-    private String name,email,dob,phone,studentClass,gender;
+    private String name,email,dob,phone,gender;
+    private int studentClass;
     private EditText studentPassword, studentAddress, studentMedicalState, studentPreviousSchool;
     private Spinner studentClassBranch, studentBloodGroup;
     private RequestQueue queue;
@@ -43,7 +47,7 @@ public class addStudent2 extends AppCompatActivity {
          email = intent.getStringExtra("email");
          dob = intent.getStringExtra("dob");
          phone = intent.getStringExtra("phone");
-         studentClass = intent.getStringExtra("class");
+         studentClass = intent.getIntExtra("class", 0);
          gender = intent.getStringExtra("gender");
 
          setupBloodGroupSpinner();
@@ -68,7 +72,7 @@ public class addStudent2 extends AppCompatActivity {
         studentClassBranch = findViewById(R.id.studentClassBransh);
         studentBloodGroup = findViewById(R.id.studentBloodGroup);
     }
-    private void fetchBranchesFromApi(String classNum) {
+    private void fetchBranchesFromApi(int classNum) {
         String url = getString(R.string.URL) + "classes/list.php?class_num=" + classNum;
 
         JsonObjectRequest request = new JsonObjectRequest(
@@ -83,6 +87,7 @@ public class addStudent2 extends AppCompatActivity {
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject item = data.getJSONObject(i);
                             branches.add(item.getString("class_branch"));
+                            Log.d("BRANCHES", item.getString("class_branch"));
                         }
 
                         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
@@ -99,7 +104,15 @@ public class addStudent2 extends AppCompatActivity {
                     Toast.makeText(this, "Error fetching branches", Toast.LENGTH_SHORT).show();
                     error.printStackTrace();
                 }
-        );
+        ){
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Authorization", "Bearer " + MainActivity.token);
+                return headers;
+            }
+        };
 
         queue.add(request);
     }
