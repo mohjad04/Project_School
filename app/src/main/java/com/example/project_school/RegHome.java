@@ -47,9 +47,9 @@ public class RegHome extends AppCompatActivity {
             startActivity(intent);
         });
 
-//        scheduleBtn.setOnClickListener(v -> {
-//            Intent intent = new Intent(RegHome.this, ScheduleActivity.class);
-//            startActivity(intent);
-//        });
+        scheduleBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(RegHome.this, CreateSchedule.class);
+            startActivity(intent);
+        });
     }
 }

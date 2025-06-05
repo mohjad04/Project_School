@@ -13,4 +13,10 @@ public class ScheduleItem {
         this.courseName = courseName;
         this.teacherName = teacherName;
     }
+
+    public ScheduleItem(String courseName, String teacherName){
+        this.courseName = courseName;
+        this.teacherName = teacherName;
+    }
+
 }

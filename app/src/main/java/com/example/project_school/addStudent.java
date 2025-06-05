@@ -63,6 +63,8 @@ public class addStudent extends AppCompatActivity {
             // Optional: validate input here
             goToAddStudent2();
         });
+
+        backButton.setOnClickListener(v -> finish());
     }
 
     private void initViews() {
@@ -77,6 +79,15 @@ public class addStudent extends AppCompatActivity {
         titleText = findViewById(R.id.title_text);
     }
 
+
+
+
+
+
+
+
+
+
     private void setupClassSpinner() {
         String[] classes = {
                 "1st Grade", "2nd Grade", "3rd Grade", "4th Grade", "5th Grade",
@@ -89,7 +100,7 @@ public class addStudent extends AppCompatActivity {
         studentClassSpinner.setAdapter(adapter);
 
         String[] genders = {
-                "Female", "Male"
+                "female", "male"
         };
 
         ArrayAdapter<String> adapter2 = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, genders);
@@ -130,12 +141,51 @@ public class addStudent extends AppCompatActivity {
         String dob = studentDob.getText().toString().trim();
         String phone = studentPhone.getText().toString().trim();
         String studentClass = studentClassSpinner.getSelectedItem().toString();
-        Pattern pattern = Pattern.compile("(\\d{1,2})");
-        Matcher matcher = pattern.matcher(studentClass);
-        matcher.find();
-        int number = Integer.parseInt(matcher.group(1));
         String gender = studentGender.getSelectedItem().toString();
 
+        // Validate inputs
+        if (name.isEmpty()) {
+            studentName.setError("Name is required");
+            studentName.requestFocus();
+            return;
+        }
+
+        if (email.isEmpty()) {
+            studentEmail.setError("Email is required");
+            studentEmail.requestFocus();
+            return;
+        } else if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            studentEmail.setError("Invalid email format");
+            studentEmail.requestFocus();
+            return;
+        }
+
+        if (dob.isEmpty()) {
+            studentDob.setError("Date of Birth is required");
+            studentDob.requestFocus();
+            return;
+        }
+
+        if (phone.isEmpty()) {
+            studentPhone.setError("Phone number is required");
+            studentPhone.requestFocus();
+            return;
+        } else if (phone.length() < 8 || phone.length() > 15) {
+            studentPhone.setError("Invalid phone number length");
+            studentPhone.requestFocus();
+            return;
+        }
+
+        // Extract class number (e.g., "10th Grade" -> 10)
+        Pattern pattern = Pattern.compile("(\\d{1,2})");
+        Matcher matcher = pattern.matcher(studentClass);
+        if (!matcher.find()) {
+            Toast.makeText(this, "Invalid class selected", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        int number = Integer.parseInt(matcher.group(1));
+
+        // All checks passed, go to next activity
         Intent intent = new Intent(addStudent.this, addStudent2.class);
         intent.putExtra("name", name);
         intent.putExtra("email", email);
@@ -146,5 +196,6 @@ public class addStudent extends AppCompatActivity {
 
         startActivity(intent);
     }
+
 
 }

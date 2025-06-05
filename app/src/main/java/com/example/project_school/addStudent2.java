@@ -6,6 +6,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -36,6 +37,8 @@ public class addStudent2 extends AppCompatActivity {
     private Spinner studentClassBranch, studentBloodGroup;
     private RequestQueue queue;
     private Button submitStudentButton;
+    private ImageView backButton;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +61,7 @@ public class addStudent2 extends AppCompatActivity {
         submitStudentButton.setOnClickListener(v -> submitStudentDataToServer());
 // Now you can use these values in addStudent2
 
+        backButton.setOnClickListener(v -> finish());
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -74,6 +78,7 @@ public class addStudent2 extends AppCompatActivity {
         studentClassBranch = findViewById(R.id.studentClassBransh);
         studentBloodGroup = findViewById(R.id.studentBloodGroup);
         submitStudentButton = findViewById(R.id.submitStudentButton);
+        backButton = findViewById(R.id.back_button);
     }
     private void fetchBranchesFromApi(int classNum) {
         String url = getString(R.string.URL) + "classes/list.php?class_num=" + classNum;
@@ -137,26 +142,22 @@ public class addStudent2 extends AppCompatActivity {
         String branch = studentClassBranch.getSelectedItem().toString();
         String bloodGroup = studentBloodGroup.getSelectedItem().toString();
 
-        String url = getString(R.string.URL) + "students/create.php"; // Your server endpoint
+        String url = getString(R.string.URL) + "students/create.php";
 
         JSONObject jsonBody = new JSONObject();
         try {
-            // Data from addStudent activity
             jsonBody.put("name", name);
             jsonBody.put("email", email);
-            jsonBody.put("dob", dob);
+            jsonBody.put("date_of_birth", dob);
             jsonBody.put("phone", phone);
-            jsonBody.put("student_class", studentClass);
             jsonBody.put("gender", gender);
-
-            // Data from addStudent2 activity
+            jsonBody.put("class_num", studentClass);
+            jsonBody.put("class_branch", branch);
             jsonBody.put("password", password);
             jsonBody.put("address", address);
-            jsonBody.put("medical_state", medicalState);
+            jsonBody.put("medical_conditions", medicalState);
             jsonBody.put("previous_school", previousSchool);
-            jsonBody.put("class_branch", branch);
             jsonBody.put("blood_group", bloodGroup);
-
         } catch (JSONException e) {
             e.printStackTrace();
             Toast.makeText(this, "Failed to build JSON", Toast.LENGTH_SHORT).show();
@@ -168,8 +169,26 @@ public class addStudent2 extends AppCompatActivity {
                 url,
                 jsonBody,
                 response -> {
-                    Toast.makeText(this, "Student added successfully!", Toast.LENGTH_SHORT).show();
-                    finish(); // or redirect
+                    try {
+                        if (response.has("status") && response.getString("status").equals("success")) {
+                            Toast.makeText(this, "Success to add student", Toast.LENGTH_SHORT).show();
+                            JSONObject data = response.getJSONObject("data");
+                            int studentId = data.getInt("student_id");
+
+                            Intent intent = new Intent(addStudent2.this, studentInfo.class);
+                            intent.putExtra("id", studentId);
+                            intent.putExtra("name", name);
+                            intent.putExtra("email", email);
+                            intent.putExtra("dob", dob);
+                            intent.putExtra("password", password);
+                            startActivity(intent);
+                        } else {
+                            Toast.makeText(this, "Failed to add student", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Invalid response from server", Toast.LENGTH_SHORT).show();
+                    }
                 },
                 error -> {
                     Toast.makeText(this, "Error: " + error.toString(), Toast.LENGTH_LONG).show();
@@ -187,6 +206,8 @@ public class addStudent2 extends AppCompatActivity {
 
         queue.add(request);
     }
+
+
 
 
 
