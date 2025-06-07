@@ -2,6 +2,7 @@ package com.example.project_school;
 
 import android.app.AlertDialog;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -28,7 +29,7 @@ public class CreateSchedule extends AppCompatActivity {
 
     private final List<ScheduleItem> scheduleList = new ArrayList<>();
 
-    private final String[] days = {"Saturday", "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday"};
+    private final String[] days = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +58,8 @@ public class CreateSchedule extends AppCompatActivity {
             }
 
             @Override
-            public void onNothingSelected(AdapterView<?> parent) {}
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
         });
 
         addButton.setOnClickListener(v -> showAddCourseDialog());
@@ -72,8 +74,7 @@ public class CreateSchedule extends AppCompatActivity {
     private void fetchBranchesFromApi(int classNum) {
         String url = getString(R.string.URL) + "classes/list.php?class_num=" + classNum;
 
-        JsonObjectRequest request = new JsonObjectRequest(
-                Request.Method.GET, url, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
                         JSONArray data = response.getJSONArray("data");
@@ -89,8 +90,7 @@ public class CreateSchedule extends AppCompatActivity {
                         Toast.makeText(this, "Failed to parse branches", Toast.LENGTH_SHORT).show();
                     }
                 },
-                error -> Toast.makeText(this, "Error fetching branches", Toast.LENGTH_SHORT).show()
-        ) {
+                error -> Toast.makeText(this, "Error fetching branches", Toast.LENGTH_SHORT).show()) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
@@ -106,28 +106,34 @@ public class CreateSchedule extends AppCompatActivity {
     private void drawScheduleTable() {
         scheduleTable.removeAllViews();
 
+        String[][] timeSlots = {
+                {"08:00", "08:40"},
+                {"08:45", "09:25"},
+                {"09:30", "10:10"},
+                {"10:30", "11:10"},
+                {"11:15", "11:55"},
+                {"12:00", "12:40"},
+                {"12:45", "13:25"}
+        };
+
         TableRow header = new TableRow(this);
-        header.addView(createCell("Period", true));
+        header.addView(createCell("Time/Day", true));
         for (String day : days) {
             header.addView(createCell(day, true));
         }
         scheduleTable.addView(header);
 
-        for (int period = 1; period <= 7; period++) {
+        for (String[] slot : timeSlots) {
+            String timeRange = slot[0] + " - " + slot[1];
             TableRow row = new TableRow(this);
-            row.addView(createCell("P" + period, true));
+            row.addView(createCell(timeRange, true));
 
             for (String day : days) {
                 ScheduleItem matched = null;
                 for (ScheduleItem item : scheduleList) {
-                    if (item.dayOfWeek.equalsIgnoreCase(day)) {
-                        int start = Integer.parseInt(item.startTime);
-                        int end = Integer.parseInt(item.endTime);
-                        int currentHour = 6 + period;
-                        if (currentHour >= start && currentHour < end) {
-                            matched = item;
-                            break;
-                        }
+                    if (item.dayOfWeek.equalsIgnoreCase(day) && item.startTime.equals(timeRange)) {
+                        matched = item;
+                        break;
                     }
                 }
 
@@ -137,7 +143,6 @@ public class CreateSchedule extends AppCompatActivity {
                 }
                 row.addView(cell);
             }
-
             scheduleTable.addView(row);
         }
     }
@@ -145,13 +150,64 @@ public class CreateSchedule extends AppCompatActivity {
     private TextView createCell(String text, boolean bold) {
         TextView tv = new TextView(this);
         tv.setText(text);
+        tv.setTextColor(Color.BLACK);
         tv.setGravity(Gravity.CENTER);
-        tv.setPadding(8, 8, 8, 8);
-        tv.setTextSize(12);
+        tv.setPadding(4, 16, 4, 16);
+        tv.setTextSize(8);
         tv.setBackgroundResource(android.R.drawable.editbox_background);
+        tv.setWidth(200);
+        tv.setHeight(130);
         if (bold) tv.setTypeface(null, android.graphics.Typeface.BOLD);
         return tv;
     }
+
+    private void fetchAvailableTeachers(String subject, String day, String startTime, String endTime, Spinner teacherSpinner) {
+        String url = getString(R.string.URL) + "teachers/list.php?busy=true"
+                + "&start_time=" + startTime
+                + "&end_time=" + endTime
+                + "&day_of_week=" + day.toLowerCase()
+                + "&subject_specialization=" + subject;
+
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        JSONArray data = response.getJSONArray("data");
+                        List<String> availableTeachers = new ArrayList<>();
+
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject teacher = data.getJSONObject(i);
+                            String teacherName = teacher.getString("name");
+                            availableTeachers.add(teacherName);
+                        }
+
+                        if (availableTeachers.isEmpty()) {
+                            availableTeachers.add("No available teachers");
+                        }
+
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                                android.R.layout.simple_spinner_item, availableTeachers);
+                        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        teacherSpinner.setAdapter(adapter);
+                    } catch (JSONException e) {
+                        Toast.makeText(this, "Failed to parse teacher data", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> Toast.makeText(this, "Error fetching teachers", Toast.LENGTH_SHORT).show()) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Authorization", "Bearer " + MainActivity.token);
+                return headers;
+            }
+        };
+
+        queue.add(request);
+    }
+
+
+
 
     private void showAddCourseDialog() {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_course, null);
@@ -159,32 +215,122 @@ public class CreateSchedule extends AppCompatActivity {
         Spinner courseSpinner = dialogView.findViewById(R.id.courseSpinner);
         Spinner teacherSpinner = dialogView.findViewById(R.id.teacherSpinner);
         Spinner daySpinner = dialogView.findViewById(R.id.daySpinner);
-        EditText startEt = dialogView.findViewById(R.id.startPeriodEt);
-        EditText endEt = dialogView.findViewById(R.id.endPeriodEt);
-
-        ArrayAdapter<String> courseAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Arrays.asList("Math", "Science", "English"));
-        courseSpinner.setAdapter(courseAdapter);
-
-        ArrayAdapter<String> teacherAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Arrays.asList("Dr. A", "Dr. B", "Dr. C"));
-        teacherSpinner.setAdapter(teacherAdapter);
+        Spinner startSpinner = dialogView.findViewById(R.id.startPeriodSpinner);
 
         ArrayAdapter<String> dayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Arrays.asList(days));
+        dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         daySpinner.setAdapter(dayAdapter);
 
-        new AlertDialog.Builder(this)
-                .setTitle("Add Course")
-                .setView(dialogView)
-                .setPositiveButton("Add", (dialog, which) -> {
-                    String course = courseSpinner.getSelectedItem().toString();
-                    String teacher = teacherSpinner.getSelectedItem().toString();
-                    String day = daySpinner.getSelectedItem().toString();
-                    String start = String.valueOf(6 + Integer.parseInt(startEt.getText().toString()));
-                    String end = String.valueOf(6 + Integer.parseInt(endEt.getText().toString()));
+        ArrayAdapter<String> periodAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
+                Arrays.asList("08:00 - 08:40", "08:45 - 09:25", "09:30 - 10:10", "10:30 - 11:10", "11:15 - 11:55", "12:00 - 12:40", "12:45 - 13:25"));
+        periodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        startSpinner.setAdapter(periodAdapter);
 
-                    scheduleList.add(new ScheduleItem(day, start, end, course, teacher));
-                    drawScheduleTable();
-                })
-                .setNegativeButton("Cancel", null)
-                .show();
+        int selectedClass = classSpinner.getSelectedItemPosition() + 1;
+        String selectedBranch = (String) branchSpinner.getSelectedItem();
+        String url = getString(R.string.URL) + "courses/list.php?grade_level=" + selectedClass;
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(dialogView);
+        builder.setTitle("Add Course");
+
+        builder.setPositiveButton("Add", (dialog, which) -> {
+            String selectedCourse = (String) courseSpinner.getSelectedItem();
+            String selectedTeacher = (String) teacherSpinner.getSelectedItem();
+            String selectedDay = (String) daySpinner.getSelectedItem();
+            String selectedPeriod = (String) startSpinner.getSelectedItem();
+
+            if (selectedCourse != null && selectedDay != null && selectedPeriod != null && selectedTeacher != null) {
+                ScheduleItem newItem = new ScheduleItem();
+                newItem.courseName = selectedCourse;
+                newItem.dayOfWeek = selectedDay;
+                newItem.startTime = selectedPeriod;
+                newItem.teacherName = selectedTeacher;
+
+                scheduleList.add(newItem);
+                drawScheduleTable();
+            } else {
+                Toast.makeText(this, "Please fill all fields", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
+
+        AlertDialog dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
+        dialog.show();
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        JSONArray data = response.getJSONArray("data");
+                        List<String> filteredCourses = new ArrayList<>();
+                        Map<String, String> courseMap = new HashMap<>();
+
+                        for (int i = 0; i < data.length(); i++) {
+                            JSONObject item = data.getJSONObject(i);
+                            String name = item.getString("course_name");
+                            String desc = item.getString("description");
+
+                            if (selectedClass <= 10 ||
+                                    ("A".equalsIgnoreCase(selectedBranch) && desc.equalsIgnoreCase("scientific")) ||
+                                    ("B".equalsIgnoreCase(selectedBranch) && desc.equalsIgnoreCase("literary"))) {
+                                filteredCourses.add(name);
+                                courseMap.put(name, desc);
+                            }
+                        }
+
+                        ArrayAdapter<String> courseAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filteredCourses);
+                        courseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        courseSpinner.setAdapter(courseAdapter);
+
+                        final String[] selectedCourseDesc = {null};
+                        final String[] selectedDayWrapper = {null};
+                        final String[] selectedPeriodWrapper = {null};
+
+                        AdapterView.OnItemSelectedListener fetchListener = new AdapterView.OnItemSelectedListener() {
+                            @Override
+                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                                if (parent == courseSpinner) {
+                                    String course = (String) courseSpinner.getSelectedItem();
+                                    selectedCourseDesc[0] = courseMap.get(course);
+                                } else if (parent == daySpinner) {
+                                    selectedDayWrapper[0] = (String) daySpinner.getSelectedItem();
+                                } else if (parent == startSpinner) {
+                                    selectedPeriodWrapper[0] = (String) startSpinner.getSelectedItem();
+                                }
+
+                                if (selectedCourseDesc[0] != null && selectedDayWrapper[0] != null && selectedPeriodWrapper[0] != null) {
+                                    String[] times = selectedPeriodWrapper[0].split(" - ");
+                                    String start = times[0] + ":00";
+                                    String end = times[1] + ":00";
+                                    fetchAvailableTeachers(selectedCourseDesc[0], selectedDayWrapper[0], start, end, teacherSpinner);
+                                }
+                            }
+
+                            @Override
+                            public void onNothingSelected(AdapterView<?> parent) {}
+                        };
+
+                        courseSpinner.setOnItemSelectedListener(fetchListener);
+                        daySpinner.setOnItemSelectedListener(fetchListener);
+                        startSpinner.setOnItemSelectedListener(fetchListener);
+
+                    } catch (JSONException e) {
+                        Toast.makeText(this, "Failed to parse courses", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> Toast.makeText(this, "Error fetching courses", Toast.LENGTH_SHORT).show()) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Content-Type", "application/json");
+                headers.put("Authorization", "Bearer " + MainActivity.token);
+                return headers;
+            }
+        };
+
+        queue.add(request);
     }
+
 }

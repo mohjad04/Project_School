@@ -29,6 +29,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginHorizontal="24dp"
         app:layout_constraintTop_toBottomOf="@id/titleText"
+        android:background="@drawable/edittext_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -40,6 +41,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginHorizontal="24dp"
         app:layout_constraintTop_toBottomOf="@id/classSpinner"
+        android:background="@drawable/edittext_background"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
@@ -68,6 +70,7 @@
             android:padding="16dp">
 
             <!-- CardView holding the schedule table -->
+            <!-- CardView holding the schedule table with horizontal scroll -->
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -76,32 +79,41 @@
                 android:backgroundTint="#3fa9d1"
                 app:cardCornerRadius="12dp">
 
-                <TableLayout
-                    android:id="@+id/scheduleTable"
+                <HorizontalScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:stretchColumns="1,2,3,4,5,6,7"
-                    android:padding="8dp" />
+                    android:fillViewport="true"
+                    android:padding="8dp">
+
+                    <TableLayout
+                        android:id="@+id/scheduleTable"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:stretchColumns="*" />
+                </HorizontalScrollView>
             </androidx.cardview.widget.CardView>
+
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <!-- Add Course - Teacher Button -->
+
+    <!-- Save Button -->
     <Button
         android:id="@+id/addButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Course - Teacher"
+        android:layout_marginTop="32dp"
+        android:backgroundTint="@android:color/white"
         android:fontFamily="@font/dam"
+        android:text="Add Course - Teacher"
+        android:textColor="#3fa9d1"
         android:textSize="16sp"
-        android:textColor="@android:color/white"
-        android:backgroundTint="#3fa9d1"
-        android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/scheduleCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/scheduleCard" />
 
-    <!-- Save Button -->
     <Button
         android:id="@+id/saveButton"
         android:layout_width="wrap_content"
@@ -109,8 +121,8 @@
         android:text="Save Schedule"
         android:fontFamily="@font/dam"
         android:textSize="16sp"
-        android:textColor="@android:color/white"
-        android:backgroundTint="#59bfe5"
+        android:textColor="#3fa9d1"
+        android:backgroundTint="@android:color/white"
         android:layout_marginTop="12dp"
         android:layout_marginBottom="16dp"
         app:layout_constraintTop_toBottomOf="@id/addButton"
