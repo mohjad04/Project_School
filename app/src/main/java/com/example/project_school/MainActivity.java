@@ -89,12 +89,11 @@ public class MainActivity extends AppCompatActivity {
                                         response1 -> {
                                             try {
                                                 JSONArray dataArray = response1.getJSONArray("data");
-                                                JSONObject termObj = dataArray.getJSONObject(0); // Assuming only one current term
+                                                JSONObject termObj = dataArray.getJSONObject(0);
                                                 editor.putInt("current_term", termObj.getInt("term_id"));
                                                 editor.putInt("current_year", termObj.getInt("year_id"));
                                                 editor.apply();
 
-                                                // Redirect after all data saved
                                                 Intent intent;
                                                 switch (role.toLowerCase()) {
                                                     case "student":
@@ -129,7 +128,7 @@ public class MainActivity extends AppCompatActivity {
                                 queue.add(termRequest);
 
                             } catch (Exception e) {
-                                e.printStackTrace();
+                                Toast.makeText(MainActivity.this, "Login failed", Toast.LENGTH_SHORT).show();
                             }
                         },
                         error -> {

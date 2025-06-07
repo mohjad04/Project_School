@@ -19,7 +19,7 @@ import java.util.*;
 
 public class CreateSchedule extends AppCompatActivity {
 
-    private Spinner classSpinner, branchSpinner;
+    private Spinner classSpinner, branchSpinner, courseSpinner, teacherSpinner, daySpinner, startSpinner;
     private Button addButton, saveButton;
     private TableLayout scheduleTable;
     private RequestQueue queue;
@@ -163,8 +163,8 @@ public class CreateSchedule extends AppCompatActivity {
 
     private void fetchAvailableTeachers(String subject, String day, String startTime, String endTime, Spinner teacherSpinner) {
         String url = getString(R.string.URL) + "teachers/list.php?busy=true"
-                + "&start_time=" + startTime
-                + "&end_time=" + endTime
+                + "&start_time=" + startTime + ":00"
+                + "&end_time=" + endTime + ":00"
                 + "&day_of_week=" + day.toLowerCase()
                 + "&subject_specialization=" + subject;
 
@@ -206,23 +206,20 @@ public class CreateSchedule extends AppCompatActivity {
         queue.add(request);
     }
 
-
-
-
     private void showAddCourseDialog() {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_add_course, null);
 
-        Spinner courseSpinner = dialogView.findViewById(R.id.courseSpinner);
-        Spinner teacherSpinner = dialogView.findViewById(R.id.teacherSpinner);
-        Spinner daySpinner = dialogView.findViewById(R.id.daySpinner);
-        Spinner startSpinner = dialogView.findViewById(R.id.startPeriodSpinner);
+        courseSpinner = dialogView.findViewById(R.id.courseSpinner);
+        teacherSpinner = dialogView.findViewById(R.id.teacherSpinner);
+        daySpinner = dialogView.findViewById(R.id.daySpinner);
+        startSpinner = dialogView.findViewById(R.id.startPeriodSpinner);
 
         ArrayAdapter<String> dayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, Arrays.asList(days));
         dayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         daySpinner.setAdapter(dayAdapter);
 
-        ArrayAdapter<String> periodAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item,
-                Arrays.asList("08:00 - 08:40", "08:45 - 09:25", "09:30 - 10:10", "10:30 - 11:10", "11:15 - 11:55", "12:00 - 12:40", "12:45 - 13:25"));
+        List<String> periods = Arrays.asList("08:00 - 08:40", "08:45 - 09:25", "09:30 - 10:10", "10:30 - 11:10", "11:15 - 11:55", "12:00 - 12:40", "12:45 - 13:25");
+        ArrayAdapter<String> periodAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, periods);
         periodAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         startSpinner.setAdapter(periodAdapter);
 
@@ -260,6 +257,7 @@ public class CreateSchedule extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.WHITE));
         dialog.show();
 
+        // Fetch courses
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
@@ -283,39 +281,6 @@ public class CreateSchedule extends AppCompatActivity {
                         ArrayAdapter<String> courseAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filteredCourses);
                         courseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         courseSpinner.setAdapter(courseAdapter);
-
-                        final String[] selectedCourseDesc = {null};
-                        final String[] selectedDayWrapper = {null};
-                        final String[] selectedPeriodWrapper = {null};
-
-                        AdapterView.OnItemSelectedListener fetchListener = new AdapterView.OnItemSelectedListener() {
-                            @Override
-                            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                if (parent == courseSpinner) {
-                                    String course = (String) courseSpinner.getSelectedItem();
-                                    selectedCourseDesc[0] = courseMap.get(course);
-                                } else if (parent == daySpinner) {
-                                    selectedDayWrapper[0] = (String) daySpinner.getSelectedItem();
-                                } else if (parent == startSpinner) {
-                                    selectedPeriodWrapper[0] = (String) startSpinner.getSelectedItem();
-                                }
-
-                                if (selectedCourseDesc[0] != null && selectedDayWrapper[0] != null && selectedPeriodWrapper[0] != null) {
-                                    String[] times = selectedPeriodWrapper[0].split(" - ");
-                                    String start = times[0] + ":00";
-                                    String end = times[1] + ":00";
-                                    fetchAvailableTeachers(selectedCourseDesc[0], selectedDayWrapper[0], start, end, teacherSpinner);
-                                }
-                            }
-
-                            @Override
-                            public void onNothingSelected(AdapterView<?> parent) {}
-                        };
-
-                        courseSpinner.setOnItemSelectedListener(fetchListener);
-                        daySpinner.setOnItemSelectedListener(fetchListener);
-                        startSpinner.setOnItemSelectedListener(fetchListener);
-
                     } catch (JSONException e) {
                         Toast.makeText(this, "Failed to parse courses", Toast.LENGTH_SHORT).show();
                     }
@@ -331,6 +296,28 @@ public class CreateSchedule extends AppCompatActivity {
         };
 
         queue.add(request);
+
+        // Fetch teachers when course, day, or period changes
+        AdapterView.OnItemSelectedListener listener = new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedCourse = (String) courseSpinner.getSelectedItem();
+                String selectedDay = (String) daySpinner.getSelectedItem();
+                String selectedPeriod = (String) startSpinner.getSelectedItem();
+
+                if (selectedCourse != null && selectedDay != null && selectedPeriod != null) {
+                    String[] times = selectedPeriod.split(" - ");
+                    fetchAvailableTeachers(selectedCourse, selectedDay, times[0].trim(), times[1].trim(), teacherSpinner);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {}
+        };
+
+        courseSpinner.setOnItemSelectedListener(listener);
+        daySpinner.setOnItemSelectedListener(listener);
+        startSpinner.setOnItemSelectedListener(listener);
     }
 
 }
