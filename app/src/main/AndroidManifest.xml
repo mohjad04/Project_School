@@ -26,7 +26,13 @@
             android:name=".addStudent2"
             android:exported="false" />
         <activity
-            android:name=".TeacherHome"
+            android:name=".TeacherDashboardActivity"
+            android:exported="false" />
+        <activity android:name=".TeacherScheduleActivity"
+            android:exported="false" />
+        <activity android:name=".StudentsForMarks"
+            android:exported="false" />
+        <activity android:name=".AssessmentActivity"
             android:exported="false" />
         <activity
             android:name=".addStudent"

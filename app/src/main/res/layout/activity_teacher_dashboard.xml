@@ -1,0 +1,606 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/gradient_header"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:layout_marginBottom="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Teacher Dashboard"
+                android:textColor="@android:color/white"
+                android:textSize="30sp"
+                android:fontFamily="@font/dam"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Manage your classes, marks, and assignments"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+                android:fontFamily="@font/dam"
+                android:layout_marginTop="8dp" />
+
+        </LinearLayout>
+
+        <!-- Main Grid -->
+        <GridLayout
+            android:id="@+id/main_grid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:rowCount="2"
+            android:layout_marginTop="-40dp">
+
+            <!-- Schedule Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/schedule_card"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="#E3EDF0"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📅"
+                        android:textSize="32sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="View Schedule"
+                        android:textColor="#3fa9d1"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:textAlignment="center" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Marks Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/marks_card"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="#E3EDF0"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📊"
+                        android:textSize="32sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Publish Marks"
+                        android:textColor="#3fa9d1"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:textAlignment="center" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Assignment Card -->
+            <androidx.cardview.widget.CardView
+                android:id="@+id/assignment_card"
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="#E3EDF0"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📝"
+                        android:textSize="32sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Send Assignment"
+                        android:textColor="#3fa9d1"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:textAlignment="center" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <!-- Reports Card -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="0dp"
+                android:layout_height="120dp"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="#E3EDF0"
+                android:clickable="true"
+                android:foreground="?android:attr/selectableItemBackground">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="📈"
+                        android:textSize="32sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="View Reports"
+                        android:textColor="#3fa9d1"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:textStyle="bold"
+                        android:layout_marginTop="8dp"
+                        android:textAlignment="center" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </GridLayout>
+
+        <!-- Marks Container -->
+        <LinearLayout
+            android:id="@+id/marks_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="16dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/white"
+                android:layout_margin="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Publish Marks"
+                        android:textColor="#3fa9d1"
+                        android:textSize="24sp"
+                        android:fontFamily="@font/dam"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Class Selection -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select Class"
+                        android:textColor="#494747"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:layout_marginBottom="8dp" />
+
+                    <Spinner
+                        android:id="@+id/class_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/edittext_background"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Course Selection -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select Course"
+                        android:textColor="#494747"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:layout_marginBottom="8dp" />
+
+                    <Spinner
+                        android:id="@+id/course_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/edittext_background"
+                        android:layout_marginBottom="16dp" />
+
+
+                    <Button
+                        android:id="@+id/load_students_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:text="Load Students"
+                        android:textColor="#FFFFFF"
+                        android:backgroundTint="#3fa9d1"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+        <!-- Assignment Container -->
+        <LinearLayout
+            android:id="@+id/assignment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:layout_marginTop="16dp">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="8dp"
+                app:cardBackgroundColor="@android:color/white"
+                android:layout_margin="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Send Assignment"
+                        android:textColor="#3fa9d1"
+                        android:textSize="24sp"
+                        android:fontFamily="@font/dam"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Class Selection -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select Class"
+                        android:textColor="#494747"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:layout_marginBottom="8dp" />
+
+                    <Spinner
+                        android:id="@+id/assignment_class_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/edittext_background"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Course Selection -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Select Course"
+                        android:textColor="#494747"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:layout_marginBottom="8dp" />
+
+                    <Spinner
+                        android:id="@+id/assignment_course_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/edittext_background"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Assignment Title -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Assignment Title"
+                        android:textColor="#494747"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/assignment_title_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/edittext_background"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/dam"
+                        android:hint="Enter assignment title"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Assignment Description -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Assignment Description"
+                        android:textColor="#494747"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/assignment_description_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="120dp"
+                        android:background="@drawable/edittext_background"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/dam"
+                        android:hint="Enter assignment description and instructions"
+                        android:gravity="top"
+                        android:inputType="textMultiLine"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Assessment Type -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Assessment Type"
+                        android:textColor="#494747"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:layout_marginBottom="8dp" />
+
+                    <Spinner
+                        android:id="@+id/assessment_type_spinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/edittext_background"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Assessment Name -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Assessment Name"
+                        android:textColor="#494747"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/assessment_name_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/edittext_background"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/dam"
+                        android:hint="Enter assessment name"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Score and Max Score Row -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_marginBottom="16dp">
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_marginEnd="8dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Score"
+                                android:textColor="#494747"
+                                android:textSize="16sp"
+                                android:fontFamily="@font/dam"
+                                android:layout_marginBottom="8dp" />
+
+                            <EditText
+                                android:id="@+id/score_edit"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:background="@drawable/edittext_background"
+                                android:padding="12dp"
+                                android:textSize="14sp"
+                                android:fontFamily="@font/dam"
+                                android:hint="85"
+                                android:inputType="numberDecimal" />
+
+                        </LinearLayout>
+
+                        <!-- Remarks -->
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Remarks"
+                            android:textColor="#494747"
+                            android:textSize="16sp"
+                            android:fontFamily="@font/dam"
+                            android:layout_marginBottom="8dp" />
+
+                        <EditText
+                            android:id="@+id/remarks_edit"
+                            android:layout_width="match_parent"
+                            android:layout_height="80dp"
+                            android:background="@drawable/edittext_background"
+                            android:padding="12dp"
+                            android:textSize="14sp"
+                            android:fontFamily="@font/dam"
+                            android:hint="Enter remarks (optional)"
+                            android:gravity="top"
+                            android:inputType="textMultiLine"
+                            android:layout_marginBottom="24dp" />
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            android:layout_marginStart="8dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Max Score"
+                                android:textColor="#494747"
+                                android:textSize="16sp"
+                                android:fontFamily="@font/dam"
+                                android:layout_marginBottom="8dp" />
+
+                            <EditText
+                                android:id="@+id/max_score_edit"
+                                android:layout_width="match_parent"
+                                android:layout_height="48dp"
+                                android:background="@drawable/edittext_background"
+                                android:padding="12dp"
+                                android:textSize="14sp"
+                                android:fontFamily="@font/dam"
+                                android:hint="100"
+                                android:inputType="numberDecimal" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <!-- Percentage -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Percentage Weight"
+                        android:textColor="#494747"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/percentage_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/edittext_background"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/dam"
+                        android:hint="30"
+                        android:inputType="numberDecimal"
+                        android:layout_marginBottom="16dp" />
+
+                    <!-- Due Date -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Due Date"
+                        android:textColor="#494747"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:layout_marginBottom="8dp" />
+
+                    <EditText
+                        android:id="@+id/due_date_edit"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/edittext_background"
+                        android:padding="12dp"
+                        android:textSize="14sp"
+                        android:fontFamily="@font/dam"
+                        android:hint="Select due date"
+                        android:focusable="false"
+                        android:clickable="true"
+                        android:layout_marginBottom="24dp" />
+
+                    <Button
+                        android:id="@+id/send_assignment_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/button_background"
+                        android:text="Send Assignment"
+                        android:textColor="@android:color/white"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/dam"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</ScrollView>

@@ -22,7 +22,6 @@ public class CreateSchedule extends AppCompatActivity {
     private Button addButton, saveButton;
     private TableLayout scheduleTable;
     private RequestQueue queue;
-
     private ArrayList<String> classList = new ArrayList<>();
     private ArrayList<String> branchList = new ArrayList<>();
     private ArrayAdapter<String> branchAdapter;
