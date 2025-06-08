@@ -1,5 +1,6 @@
 package com.example.project_school;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -33,6 +34,7 @@ public class CourseListActivity extends AppCompatActivity {
     List<Course> courseList = new ArrayList<>();
     CourseAdapter adapter;
     String source,studentId;
+    SharedPreferences sharedPreferences;
 
 
 
@@ -45,6 +47,8 @@ public class CourseListActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarCourse);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        sharedPreferences = getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
 
 
 
@@ -109,7 +113,7 @@ public class CourseListActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
-                headers.put("Authorization", "Bearer " + MainActivity.token);
+                headers.put("Authorization", "Bearer " + sharedPreferences.getString("auth_token", ""));
                 return headers;
             }
         };

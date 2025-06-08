@@ -3,11 +3,11 @@ package com.example.project_school;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import org.json.JSONArray;
@@ -34,7 +33,7 @@ import java.util.Map;
 
 public class MarkAttendance extends AppCompatActivity {
 
-    private Spinner classSpinner, branchSpinner;
+    private Spinner classSpinner;
     private EditText dateEditText;
     private Button loadStudentsBtn, submitAttendanceBtn;
     private RecyclerView studentsRecyclerView;
@@ -53,10 +52,6 @@ public class MarkAttendance extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mark_attendance);
 
-        initializeViews();
-        setupSpinners();
-        setupDatePicker();
-        setupClickListeners();
 
         requestQueue = Volley.newRequestQueue(this);
         studentsList = new ArrayList<>();
@@ -68,6 +63,11 @@ public class MarkAttendance extends AppCompatActivity {
         yearID = sharedPreferences.getInt("current_year", -1);
         authToken = sharedPreferences.getString("auth_token", "");
 
+        initializeViews();
+        setupSpinners();
+        setupDatePicker();
+        setupClickListeners();
+
         // Set today's date as default
         selectedDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
         dateEditText.setText(selectedDate);
@@ -75,7 +75,6 @@ public class MarkAttendance extends AppCompatActivity {
 
     private void initializeViews() {
         classSpinner = findViewById(R.id.classSpinner);
-        branchSpinner = findViewById(R.id.branchSpinner);
         dateEditText = findViewById(R.id.dateEditText);
         loadStudentsBtn = findViewById(R.id.loadStudentsBtn);
         submitAttendanceBtn = findViewById(R.id.submitAttendanceBtn);
@@ -85,21 +84,56 @@ public class MarkAttendance extends AppCompatActivity {
     }
 
     private void setupSpinners() {
-        // Class numbers (1-12)
-        String[] classes = new String[12];
-        for (int i = 0; i < 12; i++) {
-            classes[i] = String.valueOf(i + 1);
-        }
-        ArrayAdapter<String> classAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, classes);
-        classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        classSpinner.setAdapter(classAdapter);
-
-        // Branch options
-        String[] branches = {"A", "B", "C", "D"};
-        ArrayAdapter<String> branchAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, branches);
-        branchAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        branchSpinner.setAdapter(branchAdapter);
+        loadClasses((a, b) -> {});
     }
+
+    private void loadClasses(TeacherDashboardActivity.DataLoadCallback callback) {
+        String classesUrl = BASE_URL + "teachers/listClasses.php?teacher_id=" + teacherId +
+                "&term_id=" + termID + "&year_id=" + yearID;
+
+        JsonObjectRequest classesRequest = new JsonObjectRequest(Request.Method.GET, classesUrl, null,
+                response -> {
+                    try {
+                        if (response.getString("status").equals("success")) {
+                            JSONArray dataArray = response.getJSONArray("data");
+                            List<String> classes = new ArrayList<>();
+
+                            for (int i = 0; i < dataArray.length(); i++) {
+                                JSONObject classObj = dataArray.getJSONObject(i);
+                                String classData = classObj.getString("class_num") + " " +
+                                        classObj.getString("class_branch");
+                                classes.add(classData);
+                            }
+
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                                    android.R.layout.simple_spinner_item, classes);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            classSpinner.setAdapter(adapter);
+
+                            callback.onDataLoaded(classes, dataArray);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        callback.onDataLoaded(new ArrayList<>(), null);
+                    }
+                },
+                error -> {
+                    Toast.makeText(this, "No classes found", Toast.LENGTH_SHORT).show();
+                    Log.e("Volley", "Error loading classes: " + error.toString());
+                    callback.onDataLoaded(new ArrayList<>(), null);
+                }) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + authToken);
+                return headers;
+            }
+        };
+
+        requestQueue.add(classesRequest);
+    }
+
 
     private void setupDatePicker() {
         dateEditText.setOnClickListener(v -> {
@@ -125,8 +159,10 @@ public class MarkAttendance extends AppCompatActivity {
     }
 
     private void loadStudents() {
-        String classNum = classSpinner.getSelectedItem().toString();
-        String branch = branchSpinner.getSelectedItem().toString();
+        String classData = classSpinner.getSelectedItem().toString();
+        String[] classInfo = classData.split(" ");
+        String classNum = classInfo[0];
+        String branch = classInfo[1];
 
         // API call to fetch students by class and branch
         String url = BASE_URL + "students/list.php?class_num=" + classNum + "&class_branch=" + branch;
@@ -183,7 +219,6 @@ public class MarkAttendance extends AppCompatActivity {
             return;
         }
 
-        // Submit attendance for each student
         for (Student student : studentsList) {
             submitSingleAttendance(student);
         }

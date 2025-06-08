@@ -13,7 +13,7 @@
             android:text="Attendance Report"
             android:textSize="24sp"
             android:textStyle="bold"
-            android:textColor="#333333"
+            android:textColor="@color/Blue"
             android:gravity="center"
             android:layout_marginBottom="24dp" />
 
@@ -44,54 +44,23 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="16dp">
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
 
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="8dp">
+                        android:text="Class"
+                        android:textSize="14sp"
+                        android:textColor="#666666"
+                        android:layout_marginBottom="4dp" />
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Class"
-                            android:textSize="14sp"
-                            android:textColor="#666666"
-                            android:layout_marginBottom="4dp" />
-
-                        <Spinner
-                            android:id="@+id/classSpinner"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:background="@drawable/spinner_background" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Branch"
-                            android:textSize="14sp"
-                            android:textColor="#666666"
-                            android:layout_marginBottom="4dp" />
-
-                        <Spinner
-                            android:id="@+id/branchSpinner"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:background="@drawable/spinner_background" />
-
-                    </LinearLayout>
+                    <Spinner
+                        android:id="@+id/classSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/spinner_background" />
 
                 </LinearLayout>
 
@@ -201,21 +170,6 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-
-        <!-- Export Button -->
-        <Button
-            android:id="@+id/exportReportBtn"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:text="Export to CSV"
-            android:textColor="@android:color/white"
-            android:background="@drawable/button_success"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:visibility="gone"
-            android:layout_marginBottom="16dp"
-            android:drawableStart="@drawable/ic_download"
-            android:drawablePadding="8dp" />
 
         <!-- Report Results Card -->
         <androidx.cardview.widget.CardView

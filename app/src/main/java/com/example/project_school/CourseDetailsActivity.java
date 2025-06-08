@@ -129,7 +129,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
-                headers.put("Authorization", "Bearer " + MainActivity.token);
+                headers.put("Authorization", "Bearer " + sharedPreferences.getString("auth_token", ""));
                 return headers;
             }
         };

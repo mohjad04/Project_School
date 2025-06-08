@@ -3,6 +3,7 @@ package com.example.project_school;
 import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -30,9 +31,9 @@ import java.util.Map;
 
 public class ReportAttendance extends AppCompatActivity {
 
-    private Spinner classSpinner, branchSpinner, statusSpinner;
+    private Spinner classSpinner, statusSpinner;
     private EditText startDateEditText, endDateEditText;
-    private Button generateReportBtn, exportReportBtn;
+    private Button generateReportBtn;
     private RecyclerView attendanceReportRecyclerView;
     private RequestQueue requestQueue;
     private AttendanceReportAdapter reportAdapter;
@@ -40,6 +41,8 @@ public class ReportAttendance extends AppCompatActivity {
     private String selectedStartDate, selectedEndDate;
     private String BASE_URL;
     private String authToken;
+    private int teacherId;
+    private int termID, yearID;
     private SharedPreferences sharedPreferences;
 
     @Override
@@ -47,17 +50,21 @@ public class ReportAttendance extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_report_attendance);
 
-        initializeViews();
-        setupSpinners();
-        setupDatePickers();
-        setupClickListeners();
-
         requestQueue = Volley.newRequestQueue(this);
         attendanceRecords = new ArrayList<>();
 
         sharedPreferences = getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         authToken = sharedPreferences.getString("auth_token", "");
         BASE_URL = getString(R.string.URL);
+        teacherId = sharedPreferences.getInt("user_id", 0);
+        termID = sharedPreferences.getInt("current_term", -1);
+        yearID = sharedPreferences.getInt("current_year", -1);
+
+        initializeViews();
+        setupSpinners();
+        setupDatePickers();
+        setupClickListeners();
+
 
         // Set default date range (last 30 days)
         Calendar calendar = Calendar.getInstance();
@@ -71,34 +78,65 @@ public class ReportAttendance extends AppCompatActivity {
 
     private void initializeViews() {
         classSpinner = findViewById(R.id.classSpinner);
-        branchSpinner = findViewById(R.id.branchSpinner);
         statusSpinner = findViewById(R.id.statusSpinner);
         startDateEditText = findViewById(R.id.startDateEditText);
         endDateEditText = findViewById(R.id.endDateEditText);
         generateReportBtn = findViewById(R.id.generateReportBtn);
-        exportReportBtn = findViewById(R.id.exportReportBtn);
         attendanceReportRecyclerView = findViewById(R.id.attendanceReportRecyclerView);
 
         attendanceReportRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
+    private void loadClasses(TeacherDashboardActivity.DataLoadCallback callback) {
+        String classesUrl = BASE_URL + "teachers/listClasses.php?teacher_id=" + teacherId +
+                "&term_id=" + termID + "&year_id=" + yearID;
+
+        JsonObjectRequest classesRequest = new JsonObjectRequest(Request.Method.GET, classesUrl, null,
+                response -> {
+                    try {
+                        if (response.getString("status").equals("success")) {
+                            JSONArray dataArray = response.getJSONArray("data");
+                            List<String> classes = new ArrayList<>();
+                            classes.add("All Classes");
+
+                            for (int i = 0; i < dataArray.length(); i++) {
+                                JSONObject classObj = dataArray.getJSONObject(i);
+                                String classData = classObj.getString("class_num") + " " +
+                                        classObj.getString("class_branch");
+                                classes.add(classData);
+                            }
+
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                                    android.R.layout.simple_spinner_item, classes);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            classSpinner.setAdapter(adapter);
+
+                            callback.onDataLoaded(classes, dataArray);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        callback.onDataLoaded(new ArrayList<>(), null);
+                    }
+                },
+                error -> {
+                    Toast.makeText(this, "No classes found", Toast.LENGTH_SHORT).show();
+                    Log.e("Volley", "Error loading classes: " + error.toString());
+                    callback.onDataLoaded(new ArrayList<>(), null);
+                }) {
+
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + authToken);
+                return headers;
+            }
+        };
+
+        requestQueue.add(classesRequest);
+    }
+
     private void setupSpinners() {
-        // Class numbers (All + 1-12)
-        String[] classes = new String[13];
-        classes[0] = "All Classes";
-        for (int i = 1; i < 13; i++) {
-            classes[i] = String.valueOf(i);
-        }
-        ArrayAdapter<String> classAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, classes);
-        classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        classSpinner.setAdapter(classAdapter);
-
-        // Branch options (All + A-D)
-        String[] branches = {"All Branches", "A", "B", "C", "D"};
-        ArrayAdapter<String> branchAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, branches);
-        branchAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        branchSpinner.setAdapter(branchAdapter);
-
+        loadClasses((a, b) ->{});
         // Status options
         String[] statuses = {"All Status", "present", "absent", "late", "sick"};
         ArrayAdapter<String> statusAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, statuses);
@@ -135,7 +173,6 @@ public class ReportAttendance extends AppCompatActivity {
 
     private void setupClickListeners() {
         generateReportBtn.setOnClickListener(v -> generateReport());
-        exportReportBtn.setOnClickListener(v -> exportReport());
     }
 
     private void generateReport() {
@@ -163,7 +200,6 @@ public class ReportAttendance extends AppCompatActivity {
                             attendanceRecords.add(record);
                         }
                         setupReportRecyclerView();
-                        exportReportBtn.setVisibility(View.VISIBLE);
                     } catch (JSONException e) {
                         Toast.makeText(this, "Error parsing attendance data", Toast.LENGTH_SHORT).show();
                         e.printStackTrace();
@@ -188,13 +224,8 @@ public class ReportAttendance extends AppCompatActivity {
         // Add class filter
         String selectedClass = classSpinner.getSelectedItem().toString();
         if (!selectedClass.equals("All Classes")) {
-            urlBuilder.append("class_num=").append(selectedClass).append("&");
-        }
-
-        // Add branch filter
-        String selectedBranch = branchSpinner.getSelectedItem().toString();
-        if (!selectedBranch.equals("All Branches")) {
-            urlBuilder.append("class_branch=").append(selectedBranch).append("&");
+            urlBuilder.append("class_num=").append(selectedClass.split(" ")[0]).append("&");
+            urlBuilder.append("class_branch=").append(selectedClass.split(" ")[1]).append("&");
         }
 
         // Add status filter
@@ -224,7 +255,6 @@ public class ReportAttendance extends AppCompatActivity {
         reportAdapter = new AttendanceReportAdapter(attendanceRecords);
         attendanceReportRecyclerView.setAdapter(reportAdapter);
 
-        // Show summary
         showAttendanceSummary();
     }
 
@@ -256,13 +286,6 @@ public class ReportAttendance extends AppCompatActivity {
         Toast.makeText(this, summary, Toast.LENGTH_LONG).show();
     }
 
-    private void exportReport() {
-        // Here you can implement CSV export functionality
-        // For now, just show a toast
-        Toast.makeText(this, "Export functionality to be implemented", Toast.LENGTH_SHORT).show();
-    }
-
-    // AttendanceRecord model class
     public static class AttendanceRecord {
         private int userId;
         private String studentName;
@@ -283,7 +306,6 @@ public class ReportAttendance extends AppCompatActivity {
             this.createdAt = createdAt;
         }
 
-        // Getters
         public int getUserId() { return userId; }
         public String getStudentName() { return studentName; }
         public String getStatus() { return status; }
@@ -293,7 +315,6 @@ public class ReportAttendance extends AppCompatActivity {
         public String getCreatedAt() { return createdAt; }
     }
 
-    // RecyclerView Adapter for Attendance Report
     private class AttendanceReportAdapter extends RecyclerView.Adapter<AttendanceReportAdapter.ViewHolder> {
         private List<AttendanceRecord> records;
 
@@ -340,7 +361,6 @@ public class ReportAttendance extends AppCompatActivity {
                 remarksTextView.setText(record.getRemarks().isEmpty() ? "No remarks" : record.getRemarks());
                 markedByTextView.setText("Marked by: " + record.getMarkedByName());
 
-                // Set status color
                 int statusColor;
                 switch (record.getStatus()) {
                     case "present":

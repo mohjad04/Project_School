@@ -44,54 +44,23 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginBottom="16dp">
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:layout_marginEnd="8dp">
 
-                    <LinearLayout
-                        android:layout_width="0dp"
+                    <TextView
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginEnd="8dp">
+                        android:text="Class"
+                        android:textSize="14sp"
+                        android:textColor="#666666"
+                        android:layout_marginBottom="4dp" />
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Class"
-                            android:textSize="14sp"
-                            android:textColor="#666666"
-                            android:layout_marginBottom="4dp" />
-
-                        <Spinner
-                            android:id="@+id/classSpinner"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:background="@drawable/spinner_background" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        android:layout_marginStart="8dp">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Branch"
-                            android:textSize="14sp"
-                            android:textColor="#666666"
-                            android:layout_marginBottom="4dp" />
-
-                        <Spinner
-                            android:id="@+id/branchSpinner"
-                            android:layout_width="match_parent"
-                            android:layout_height="48dp"
-                            android:background="@drawable/spinner_background" />
-
-                    </LinearLayout>
+                    <Spinner
+                        android:id="@+id/classSpinner"
+                        android:layout_width="match_parent"
+                        android:layout_height="48dp"
+                        android:background="@drawable/spinner_background" />
 
                 </LinearLayout>
 

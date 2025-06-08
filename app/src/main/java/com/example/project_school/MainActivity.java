@@ -99,12 +99,13 @@ public class MainActivity extends AppCompatActivity {
                                                     case "student":
                                                         intent = new Intent(MainActivity.this, HomePage.class);
                                                         intent.putExtra("ID",user);
-
                                                         break;
                                                     case "registrar":
                                                         intent = new Intent(MainActivity.this, RegHome.class); break;
                                                     case "teacher":
                                                         intent = new Intent(MainActivity.this, TeacherDashboardActivity.class); break;
+                                                    case "parent":
+                                                        intent = new Intent(MainActivity.this, ParentActivity.class); break;
                                                     default:
                                                         return;
                                                 }

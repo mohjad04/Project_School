@@ -179,6 +179,7 @@ public class TeacherDashboardActivity extends AppCompatActivity {
             container.setVisibility(View.GONE);
         } else {
             marksContainer.setVisibility(View.GONE);
+            reportsContainer.setVisibility(View.GONE);
             container.setVisibility(View.VISIBLE);
         }
     }

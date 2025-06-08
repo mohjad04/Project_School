@@ -1,4 +1,41 @@
 <resources>
     <string name="app_name">Project_School</string>
     <string name="URL">https://gobbler-tight-poorly.ngrok-free.app/api/</string>
+
+    <string name="my_children">My Children</string>
+    <string name="loading_students">Loading students...</string>
+    <string name="no_students_found">No students found</string>
+    <string name="pull_to_refresh">Pull down to refresh</string>
+    <string name="connection_error">Connection Error</string>
+    <string name="try_again">Try Again</string>
+    <string name="phone_not_available">Phone number not available</string>
+    <string name="email_not_available">Email address not available</string>
+    <string name="no_email_app">No email app found</string>
+    <string name="email_subject">Student Information</string>
+    <string name="student_selected">Selected: %s</string>
+
+    <!-- Status strings -->
+    <string name="status_active">ACTIVE</string>
+    <string name="status_inactive">INACTIVE</string>
+
+    <!-- Labels -->
+    <string name="label_email">Email</string>
+    <string name="label_phone">Phone</string>
+    <string name="label_blood_group">Blood Group</string>
+    <string name="label_admission_date">Admission Date</string>
+    <string name="label_class">Class</string>
+
+    <!-- Error messages -->
+    <string name="error_no_internet">No Internet Connection</string>
+    <string name="error_timeout">Request Timeout</string>
+    <string name="error_server">Server Error</string>
+    <string name="error_parsing">Data Parsing Error</string>
+    <string name="error_not_found">Resource Not Found</string>
+    <string name="error_generic">An unexpected error occurred</string>
+
+    <!-- Network error descriptions -->
+    <string name="error_check_connection">Please check your internet connection</string>
+    <string name="error_server_slow">Server is taking too long to respond</string>
+    <string name="error_server_internal">Internal server error occurred</string>
+    <string name="error_processing_data">Error processing student data</string>
 </resources>

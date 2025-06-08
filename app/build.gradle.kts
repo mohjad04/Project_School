@@ -40,7 +40,9 @@ dependencies {
     implementation(libs.android.volley)
     implementation(libs.guava)
     implementation(libs.firebase.crashlytics.buildtools)
+    implementation(libs.swiperefreshlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
+
 }
