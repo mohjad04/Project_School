@@ -6,6 +6,8 @@ public class ScheduleItem {
     public String courseName;
     public String teacherName;
     public String timerange;
+    public int courseId;
+    public int teacherId;
 
     public ScheduleItem(String dayOfWeek, String startTime, String endTime, String courseName, String teacherName) {
         this.dayOfWeek = dayOfWeek;

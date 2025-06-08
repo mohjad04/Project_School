@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
-    tools:context=".addTeacher">
+    tools:context=".ParentsForm">
 
     <!-- Back Button -->
     <ImageView
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Add Teacher"
+        android:text="Add New Parent"
         android:textSize="20dp"
         android:textColor="#3fa9d1"
         android:fontFamily="@font/dam"
@@ -33,17 +33,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Add Teacher Card -->
+    <!-- Add Student Card -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/addTeacherCard"
+        android:id="@+id/addParentCard"
         android:layout_width="0dp"
+        android:backgroundTint="@color/white"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="24dp"
         android:background="@android:color/white"
-        android:backgroundTint="@color/white"
         app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
         app:layout_constraintTop_toBottomOf="@id/title_text"
@@ -66,73 +66,93 @@
                 android:textSize="24dp" />
 
             <EditText
-                android:id="@+id/teacherName"
+                android:id="@+id/ParentName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/edittext_background"
+                android:textColor="#000000"
                 android:hint="Full Name"
                 android:inputType="textPersonName"
                 android:padding="12dp" />
 
             <EditText
-                android:id="@+id/teacherEmail"
+                android:id="@+id/ParentEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="18dp"
                 android:background="@drawable/edittext_background"
+                android:textColor="#000000"
                 android:hint="Email"
                 android:inputType="textEmailAddress"
                 android:padding="12dp" />
 
-            <EditText
-                android:id="@+id/teacherPhone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/edittext_background"
-                android:hint="Phone Number"
-                android:inputType="phone"
-                android:padding="12dp" />
-
             <Spinner
-                android:id="@+id/teacherSubjectspn"
+                android:id="@+id/ParentGenderSpinner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="18dp"
                 android:background="@drawable/edittext_background"
                 android:padding="12dp"
                 android:spinnerMode="dropdown" />
 
+
+
             <EditText
-                android:id="@+id/teacherQualificatin"
+                android:id="@+id/ParentDob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="18dp"
+                android:focusable="false"
+                android:textColor="#000000"
+                android:clickable="true"
                 android:background="@drawable/edittext_background"
-                android:hint="Qualefication"
+                android:hint="Date of Birth"
+                android:padding="12dp" />
+
+            <EditText
+                android:id="@+id/ParentAdd"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/edittext_background"
+                android:textColor="#000000"
+                android:hint="Address"
+                android:inputType="textPersonName"
+                android:padding="12dp" />
+
+
+            <EditText
+                android:id="@+id/ParentPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/edittext_background"
+                android:hint="Parent's Phone"
+                android:textColor="#000000"
+                android:inputType="phone"
+                android:padding="12dp" />
+
+            <EditText
+                android:id="@+id/ParentPas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/edittext_background"
+                android:hint="Password"
+                android:textColor="#000000"
                 android:inputType="text"
                 android:padding="12dp" />
-
-            <EditText
-                android:id="@+id/teacherexp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/edittext_background"
-                android:hint="Experience Years"
-                android:inputType="numberDecimal"
-                android:padding="12dp" />
-
+            <!-- Add Button moved inside the card -->
             <Button
-                android:id="@+id/submitTeacherButton"
+                android:id="@+id/submitParentButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="18dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#59bfe5"
                 android:fontFamily="@font/dam"
-                android:text="Add"
+                android:text="Next"
                 android:textColor="@android:color/white"
                 android:textSize="20dp" />
 

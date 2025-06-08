@@ -12,7 +12,7 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class RegHome extends AppCompatActivity {
 
-    private Button addStudentBtn, addTeacherBtn, scheduleBtn;
+    private Button addStudentBtn, addTeacherBtn, scheduleBtn,addParentbtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +34,7 @@ public class RegHome extends AppCompatActivity {
         addStudentBtn = findViewById(R.id.addStudentbtn);
         addTeacherBtn = findViewById(R.id.addTeacherbtn);
         scheduleBtn = findViewById(R.id.schedulebtn);
+        addParentbtn = findViewById(R.id.addparentbtn);
     }
 
     private void setupNavigation() {
@@ -49,6 +50,11 @@ public class RegHome extends AppCompatActivity {
 
         scheduleBtn.setOnClickListener(v -> {
             Intent intent = new Intent(RegHome.this, CreateSchedule.class);
+            startActivity(intent);
+        });
+
+        addParentbtn.setOnClickListener(v -> {
+            Intent intent = new Intent(RegHome.this, AddParent.class);
             startActivity(intent);
         });
     }

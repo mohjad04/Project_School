@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.*;
@@ -64,9 +65,8 @@ public class CreateSchedule extends AppCompatActivity {
 
         addButton.setOnClickListener(v -> showAddCourseDialog());
 
-        saveButton.setOnClickListener(v -> {
-            Toast.makeText(this, "Schedule saved", Toast.LENGTH_SHORT).show();
-        });
+        saveButton.setOnClickListener(v -> saveSchedule());
+
 
         drawScheduleTable();
     }
@@ -174,11 +174,14 @@ public class CreateSchedule extends AppCompatActivity {
                     try {
                         JSONArray data = response.getJSONArray("data");
                         List<String> availableTeachers = new ArrayList<>();
-
+                        List<Integer> teachersId = new ArrayList<>();
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject teacher = data.getJSONObject(i);
                             String teacherName = teacher.getString("name");
+                            int teacherid = teacher.getInt("teacher_id");
                             availableTeachers.add(teacherName);
+                            teachersId.add(teacherid);
+
                         }
 
                         if (availableTeachers.isEmpty()) {
@@ -189,6 +192,7 @@ public class CreateSchedule extends AppCompatActivity {
                                 android.R.layout.simple_spinner_item, availableTeachers);
                         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         teacherSpinner.setAdapter(adapter);
+                        teacherSpinner.setTag(teachersId);
                     } catch (JSONException e) {
                         Toast.makeText(this, "Failed to parse teacher data", Toast.LENGTH_SHORT).show();
                     }
@@ -237,12 +241,28 @@ public class CreateSchedule extends AppCompatActivity {
             String selectedDay = (String) daySpinner.getSelectedItem();
             String selectedPeriod = (String) startSpinner.getSelectedItem();
 
+            List<Integer> courseIds = (List<Integer>) courseSpinner.getTag();
+
+            if (courseIds == null || courseIds.isEmpty()) {
+                Toast.makeText(this, "Please select a valid course", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            List<Integer> teachersids = (List<Integer>) teacherSpinner.getTag();
+
+            if (teachersids == null || teachersids.isEmpty()) {
+                Toast.makeText(this, "Please select a valid course", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if (selectedCourse != null && selectedDay != null && selectedPeriod != null && selectedTeacher != null) {
                 ScheduleItem newItem = new ScheduleItem();
                 newItem.courseName = selectedCourse;
                 newItem.dayOfWeek = selectedDay;
                 newItem.startTime = selectedPeriod;
                 newItem.teacherName = selectedTeacher;
+                newItem.courseId = courseIds.get(courseSpinner.getSelectedItemPosition());
+                newItem.teacherId = teachersids.get(teacherSpinner.getSelectedItemPosition());
+
 
                 scheduleList.add(newItem);
                 drawScheduleTable();
@@ -263,24 +283,29 @@ public class CreateSchedule extends AppCompatActivity {
                     try {
                         JSONArray data = response.getJSONArray("data");
                         List<String> filteredCourses = new ArrayList<>();
+                        List<Integer> coursesid = new ArrayList<>();
                         Map<String, String> courseMap = new HashMap<>();
 
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject item = data.getJSONObject(i);
                             String name = item.getString("course_name");
                             String desc = item.getString("description");
+                            int courseId = item.getInt("course_id");
 
                             if (selectedClass <= 10 ||
                                     ("A".equalsIgnoreCase(selectedBranch) && desc.equalsIgnoreCase("scientific")) ||
                                     ("B".equalsIgnoreCase(selectedBranch) && desc.equalsIgnoreCase("literary"))) {
                                 filteredCourses.add(name);
                                 courseMap.put(name, desc);
+                                coursesid.add(courseId);
+
                             }
                         }
 
                         ArrayAdapter<String> courseAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, filteredCourses);
                         courseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                         courseSpinner.setAdapter(courseAdapter);
+                        courseSpinner.setTag(coursesid);
                     } catch (JSONException e) {
                         Toast.makeText(this, "Failed to parse courses", Toast.LENGTH_SHORT).show();
                     }
@@ -319,5 +344,104 @@ public class CreateSchedule extends AppCompatActivity {
         daySpinner.setOnItemSelectedListener(listener);
         startSpinner.setOnItemSelectedListener(listener);
     }
+
+    private void saveSchedule() {
+        int[] dailyLimits = {7, 7, 7, 7, 6}; // Sunday–Thursday
+        int[] dailyCount = new int[5];
+
+        for (ScheduleItem item : scheduleList) {
+            for (int i = 0; i < days.length; i++) {
+                if (item.dayOfWeek.equalsIgnoreCase(days[i])) {
+                    dailyCount[i]++;
+                }
+            }
+        }
+
+        for (int i = 0; i < dailyCount.length; i++) {
+            if (dailyCount[i] < dailyLimits[i]) {
+                Toast.makeText(this, "Schedule not complete!", Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+
+        Set<String> assignedCourses = new HashSet<>();
+
+        String token = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("auth_token", "");
+
+        for (ScheduleItem item : scheduleList) {
+            String[] times = item.startTime.split(" - ");
+            JSONObject body = new JSONObject();
+            try {
+                int classNum = classSpinner.getSelectedItemPosition() + 1;
+                String branch = branchSpinner.getSelectedItem().toString();
+                body.put("class_num", classNum);
+                body.put("class_branch", branch);
+                body.put("course_id", item.courseId);
+                body.put("teacher_id", item.teacherId);
+                body.put("day_of_week", item.dayOfWeek);
+                body.put("start_time", times[0] + ":00");
+                body.put("end_time", times[1] + ":00");
+                body.put("term_id", 2);
+            } catch (JSONException e) {
+                continue;
+            }
+
+            String scheduleUrl = getString(R.string.URL) + "schedule/create.php";
+            JsonObjectRequest scheduleRequest = new JsonObjectRequest(Request.Method.POST, scheduleUrl, body,
+                    response -> {},
+                    error -> {
+                        Log.d("error:",error.toString());
+                    }) {
+                @Override
+                public Map<String, String> getHeaders() {
+                    Map<String, String> headers = new HashMap<>();
+                    headers.put("Authorization", "Bearer " + token);
+                    return headers;
+                }
+            };
+            scheduleRequest.setShouldCache(false);
+            queue.add(scheduleRequest);
+
+            assignTeacherIfNeeded(item, assignedCourses, token);
+        }
+
+        Toast.makeText(this, "Schedule saved successfully!", Toast.LENGTH_SHORT).show();
+    }
+
+
+
+    private void assignTeacherIfNeeded(ScheduleItem item, Set<String> assignedCourses, String token) {
+        String key = item.courseId + "-" + item.teacherId;
+        if (assignedCourses.contains(key)) return;
+
+        assignedCourses.add(key);
+
+        JSONObject assignBody = new JSONObject();
+        try {
+            assignBody.put("teacher_id", item.teacherId);
+            assignBody.put("course_id", item.courseId);
+            assignBody.put("class_num", classSpinner.getSelectedItemPosition() + 1);
+            assignBody.put("class_branch", branchSpinner.getSelectedItem().toString());
+            assignBody.put("year_id", 1); // update if needed
+            assignBody.put("term_id", 2); // update if needed
+        } catch (JSONException e) {
+            return;
+        }
+
+        String assignUrl = getString(R.string.URL) + "teachers/assign.php";
+        JsonObjectRequest assignRequest = new JsonObjectRequest(Request.Method.POST, assignUrl, assignBody,
+                response -> {},
+                error -> {}) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
+        assignRequest.setShouldCache(false);
+        queue.add(assignRequest);
+    }
+
 
 }

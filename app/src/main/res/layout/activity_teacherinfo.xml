@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/gradient_background"
-    tools:context=".addTeacher">
+    tools:context=".teacherinfo">
 
     <!-- Back Button -->
     <ImageView
@@ -25,7 +25,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="Add Teacher"
+        android:text="Add teacher"
         android:textSize="20dp"
         android:textColor="#3fa9d1"
         android:fontFamily="@font/dam"
@@ -33,17 +33,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- Add Teacher Card -->
+    <!-- Add Student Card -->
     <androidx.cardview.widget.CardView
-        android:id="@+id/addTeacherCard"
+        android:id="@+id/addteacherCard"
         android:layout_width="0dp"
+        android:backgroundTint="@color/white"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginEnd="24dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="24dp"
         android:background="@android:color/white"
-        android:backgroundTint="@color/white"
         app:cardCornerRadius="16dp"
         app:cardElevation="8dp"
         app:layout_constraintTop_toBottomOf="@id/title_text"
@@ -62,7 +62,7 @@
                 style="@style/BasicText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Fill the form :"
+                android:text="Important Info :"
                 android:textSize="24dp" />
 
             <EditText
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:background="@drawable/edittext_background"
-                android:hint="Full Name"
+                android:textColor="#000000"
                 android:inputType="textPersonName"
                 android:padding="12dp" />
 
@@ -79,60 +79,52 @@
                 android:id="@+id/teacherEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="18dp"
                 android:background="@drawable/edittext_background"
-                android:hint="Email"
+                android:textColor="#000000"
                 android:inputType="textEmailAddress"
                 android:padding="12dp" />
 
-            <EditText
-                android:id="@+id/teacherPhone"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/edittext_background"
-                android:hint="Phone Number"
-                android:inputType="phone"
-                android:padding="12dp" />
 
-            <Spinner
-                android:id="@+id/teacherSubjectspn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:background="@drawable/edittext_background"
-                android:padding="12dp"
-                android:spinnerMode="dropdown" />
+
 
             <EditText
-                android:id="@+id/teacherQualificatin"
+                android:id="@+id/teacherId"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="18dp"
                 android:background="@drawable/edittext_background"
-                android:hint="Qualefication"
-                android:inputType="text"
+                android:textColor="#000000"
                 android:padding="12dp" />
 
             <EditText
-                android:id="@+id/teacherexp"
+                android:id="@+id/teacherPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="18dp"
                 android:background="@drawable/edittext_background"
-                android:hint="Experience Years"
-                android:inputType="numberDecimal"
+                android:textColor="#000000"
                 android:padding="12dp" />
 
+            <EditText
+                android:id="@+id/teacherDob"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:background="@drawable/edittext_background"
+                android:textColor="#000000"
+                android:padding="12dp" />
+
+            <!-- Add Button moved inside the card -->
             <Button
                 android:id="@+id/submitTeacherButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="18dp"
                 android:layout_gravity="center"
                 android:backgroundTint="#59bfe5"
                 android:fontFamily="@font/dam"
-                android:text="Add"
+                android:text="Done"
                 android:textColor="@android:color/white"
                 android:textSize="20dp" />
 
