@@ -5,13 +5,13 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.MenuItem; // تمت إعادة استيرادها
+import android.view.MenuItem;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar; // تمت إعادة استيرادها
+import androidx.appcompat.widget.Toolbar;
 
 import com.android.volley.Request;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -43,7 +43,6 @@ public class studentSchedule extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_schedule);
 
-        // تمت إعادة شيفرة تفعيل الـ Toolbar
         Toolbar toolbar = findViewById(R.id.toolbarSchedule);
         setSupportActionBar(toolbar);
         if (getSupportActionBar() != null) {
@@ -62,7 +61,6 @@ public class studentSchedule extends AppCompatActivity {
         fetchSchedule(classNum, classBranch, termID);
     }
 
-    // تمت إعادة هذه الدالة للتحكم في زر الرجوع
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {

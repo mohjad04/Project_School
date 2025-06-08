@@ -1,6 +1,5 @@
 package com.example.project_school;
 
-import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,7 +35,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
     private Toolbar toolbar;
     private SharedPreferences sharedPreferences;
     private int termID;
-    private int yearID;
+    private String Token;
 
 
     @Override
@@ -59,7 +58,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
         sharedPreferences = getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         termID = sharedPreferences.getInt("current_term", -1);
-        yearID = sharedPreferences.getInt("current_year", -1);
+        Token = sharedPreferences.getString("auth_token", "");
 
         txtContent=findViewById(R.id.txtContent);
 
@@ -109,8 +108,8 @@ public class CourseDetailsActivity extends AppCompatActivity {
                                 String percentage = obj.getString("percentage") + "%";
                                 String score = obj.getString("score");
                                 toolbar.setTitle(obj.getString("course_name")+" Marks");
-
-                                gradeList.add(new Grade(gradeName, percentage, score));
+                                if (!score.equals("-1.00")){
+                                gradeList.add(new Grade(gradeName, percentage, score));}
                             }
 
                             ListView listView = findViewById(R.id.listGrades);
@@ -129,7 +128,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
-                headers.put("Authorization", "Bearer " + sharedPreferences.getString("auth_token", ""));
+                headers.put("Authorization", "Bearer " + Token);
                 return headers;
             }
         };
