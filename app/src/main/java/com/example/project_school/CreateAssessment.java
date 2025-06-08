@@ -1,8 +1,12 @@
 package com.example.project_school;
 
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,37 +34,28 @@ import java.util.Map;
 
 public class CreateAssessment extends AppCompatActivity {
     private Spinner assessmentTypeSpinner;
-    private EditText assessmentNameEdit;
-    private EditText scoreEdit;
-    private EditText maxScoreEdit;
-    private EditText percentageEdit;
-    private EditText remarksEdit;
-
-    // Assignment components
-    private Spinner assignmentClassSpinner;
-    private Spinner assignmentCourseSpinner;
-    private EditText assignmentTitleEdit;
-    private EditText assignmentDescriptionEdit;
-    private EditText dueDateEdit;
+    private EditText scoreEdit, maxScoreEdit, percentageEdit, remarksEdit;
+    private Spinner assignmentClassSpinner, assignmentCourseSpinner;
+    private EditText assignmentTitleEdit, dueDateEdit;
     private Button sendAssignmentBtn;
+
     private String BASE_URL;
     private RequestQueue requestQueue;
     private String authToken;
+    private int teacherId, termID, yearID;
     private SharedPreferences sharedPreferences;
+    private ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_assessment);
 
-        // Assignment views
         assignmentClassSpinner = findViewById(R.id.assignment_class_spinner);
         assignmentCourseSpinner = findViewById(R.id.assignment_course_spinner);
         assignmentTitleEdit = findViewById(R.id.assignment_title_edit);
-        assignmentDescriptionEdit = findViewById(R.id.assignment_description_edit);
         dueDateEdit = findViewById(R.id.due_date_edit);
         assessmentTypeSpinner = findViewById(R.id.assessment_type_spinner);
-        assessmentNameEdit = findViewById(R.id.assessment_name_edit);
         scoreEdit = findViewById(R.id.score_edit);
         maxScoreEdit = findViewById(R.id.max_score_edit);
         percentageEdit = findViewById(R.id.percentage_edit);
@@ -71,18 +66,58 @@ public class CreateAssessment extends AppCompatActivity {
         requestQueue = Volley.newRequestQueue(this);
         sharedPreferences = getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
         authToken = sharedPreferences.getString("auth_token", "");
+        teacherId = sharedPreferences.getInt("user_id", 0);
+        termID = sharedPreferences.getInt("current_term", -1);
+        yearID = sharedPreferences.getInt("current_year", -1);
 
-
-        // Setup assessment type spinner
         ArrayAdapter<String> assessmentAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item,
                 new String[]{"quiz", "assignment", "midterm", "final_exam", "homework"});
         assessmentAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         assessmentTypeSpinner.setAdapter(assessmentAdapter);
-        sendAssignmentBtn.setOnClickListener(v -> sendAssignment());
 
-        // Setup date picker for due date
         dueDateEdit.setOnClickListener(v -> showDatePicker());
+
+        loadClasses((classList, rawData) -> {
+            ArrayAdapter<String> classAdapter = new ArrayAdapter<>(this,
+                    android.R.layout.simple_spinner_item, classList);
+            classAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            assignmentClassSpinner.setAdapter(classAdapter);
+
+            assignmentClassSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    String selectedClass = parent.getItemAtPosition(position).toString();
+                    List<String> courses = new ArrayList<>();
+                    List<Integer> courseIDs = new ArrayList<>();
+
+                    try {
+                        for (int i = 0; i < rawData.length(); i++) {
+                            JSONObject obj = rawData.optJSONObject(i);
+                            String classData = obj.getString("class_num") + " " + obj.getString("class_branch");
+                            if (classData.equalsIgnoreCase(selectedClass)) {
+                                courses.add(obj.getString("course_name"));
+                                courseIDs.add(obj.getInt("course_id"));
+                            }
+                        }
+
+                        ArrayAdapter<String> courseAdapter = new ArrayAdapter<>(CreateAssessment.this,
+                                android.R.layout.simple_spinner_item, courses);
+                        courseAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                        assignmentCourseSpinner.setAdapter(courseAdapter);
+                        assignmentCourseSpinner.setTag(courseIDs);
+                    } catch (JSONException e) {
+                        Log.e("CourseLoad", "JSONException: " + e.getMessage());
+                        Toast.makeText(CreateAssessment.this, "Error loading courses", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {}
+            });
+        });
+
+        sendAssignmentBtn.setOnClickListener(v -> sendAssignment());
     }
 
     private void showDatePicker() {
@@ -97,117 +132,149 @@ public class CreateAssessment extends AppCompatActivity {
                 calendar.get(Calendar.YEAR),
                 calendar.get(Calendar.MONTH),
                 calendar.get(Calendar.DAY_OF_MONTH));
-
         datePickerDialog.show();
     }
 
-    private void clearAssignmentForm() {
-        assignmentTitleEdit.setText("");
-        assignmentDescriptionEdit.setText("");
-        dueDateEdit.setText("");
-    }
-
-    private void clearMarksForm() {
-        assessmentNameEdit.setText("");
-        scoreEdit.setText("");
-        maxScoreEdit.setText("");
-        percentageEdit.setText("");
-        remarksEdit.setText("");
-    }
     private boolean validateAssignmentInput() {
         if (assignmentTitleEdit.getText().toString().trim().isEmpty()) {
             assignmentTitleEdit.setError("Assignment title is required");
             return false;
         }
-
-        if (assignmentDescriptionEdit.getText().toString().trim().isEmpty()) {
-            assignmentDescriptionEdit.setError("Assignment description is required");
-            return false;
-        }
-
         if (dueDateEdit.getText().toString().trim().isEmpty()) {
             dueDateEdit.setError("Due date is required");
             return false;
         }
-
-        return true;
-    }
-
-    private boolean validateMarksInput() {
-        if (assessmentNameEdit.getText().toString().trim().isEmpty()) {
-            assessmentNameEdit.setError("Assessment name is required");
-            return false;
-        }
-
-        if (scoreEdit.getText().toString().trim().isEmpty()) {
-            scoreEdit.setError("Score is required");
-            return false;
-        }
-
         if (maxScoreEdit.getText().toString().trim().isEmpty()) {
             maxScoreEdit.setError("Max score is required");
             return false;
         }
-
         if (percentageEdit.getText().toString().trim().isEmpty()) {
             percentageEdit.setError("Percentage is required");
             return false;
         }
-
         return true;
     }
+
+    private void clearAssignmentForm() {
+        assignmentTitleEdit.setText("");
+        dueDateEdit.setText("");
+    }
+
     private void sendAssignment() {
-        if (!validateAssignmentInput()) {
+        if (!validateAssignmentInput()) return;
+
+        List<Integer> courseIds = (List<Integer>) assignmentCourseSpinner.getTag();
+        if (courseIds == null || courseIds.isEmpty()) {
+            Toast.makeText(this, "Please select a valid course", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        // Note: This would typically use a separate assignments API endpoint
-        // For now, we'll create it as an assessment with type "assignment"
-        try {
-            @SuppressWarnings("unchecked")
-            List<Integer> courseIds = (List<Integer>) assignmentCourseSpinner.getTag();
-            int selectedCourseId = courseIds.get(assignmentCourseSpinner.getSelectedItemPosition());
+        int selectedCourseId = courseIds.get(assignmentCourseSpinner.getSelectedItemPosition());
+        String classData = assignmentClassSpinner.getSelectedItem().toString();
+        String[] classParts = classData.split(" ");
+        String classNum = classParts[0];
+        String classBranch = classParts[1];
+        String title = assignmentTitleEdit.getText().toString();
+        String dueDate = dueDateEdit.getText().toString();
+        String assessmentType = assessmentTypeSpinner.getSelectedItem().toString();
+        String score = scoreEdit.getText().toString().trim().isEmpty() ? "-1" : scoreEdit.getText().toString();
+        String maxScore = maxScoreEdit.getText().toString();
+        String percentage = percentageEdit.getText().toString();
+        String remarks = remarksEdit.getText().toString();
 
-            // In a real implementation, you would send this to all students in the selected class
-            // For now, we'll show a success message
-            Toast.makeText(this, "Assignment sent successfully to " +
-                    assignmentClassSpinner.getSelectedItem().toString(), Toast.LENGTH_SHORT).show();
-            clearAssignmentForm();
+        progressDialog = ProgressDialog.show(this, "Sending", "Creating assessment...", true, false);
 
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this, "Error sending assignment", Toast.LENGTH_SHORT).show();
-        }
+        getStudents(classNum, classBranch, (dataList, rawData) -> {
+            if (rawData == null || rawData.length() == 0) {
+                progressDialog.dismiss();
+                Toast.makeText(this, "No students found", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            final int[] successCount = {0};
+            final int[] errorCount = {0};
+            int totalStudents = rawData.length();
+
+            String url = BASE_URL + "assessments/create.php";
+
+            for (int i = 0; i < rawData.length(); i++) {
+                try {
+                    JSONObject studentObj = rawData.getJSONObject(i);
+                    int studentId = studentObj.getInt("student_id");
+
+                    JSONObject assessmentObj = new JSONObject();
+                    assessmentObj.put("student_id", studentId);
+                    assessmentObj.put("course_id", selectedCourseId);
+                    assessmentObj.put("teacher_id", teacherId);
+                    assessmentObj.put("assessment_type", assessmentType);
+                    assessmentObj.put("assessment_name", title);
+                    assessmentObj.put("score", score);
+                    assessmentObj.put("max_score", maxScore);
+                    assessmentObj.put("percentage", percentage);
+                    assessmentObj.put("date_assessed", dueDate);
+                    assessmentObj.put("term_id", termID);
+                    assessmentObj.put("remarks", remarks);
+
+                    JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, assessmentObj,
+                            response -> {
+                                successCount[0]++;
+                                if (successCount[0] + errorCount[0] == totalStudents) {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(CreateAssessment.this,
+                                            "Success: " + successCount[0] + ", Failed: " + errorCount[0],
+                                            Toast.LENGTH_LONG).show();
+                                    clearAssignmentForm();
+                                }
+                            },
+                            error -> {
+                                errorCount[0]++;
+                                Log.e("AssessmentSend", "Error: " + error.toString());
+                                if (successCount[0] + errorCount[0] == totalStudents) {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(CreateAssessment.this,
+                                            "Success: " + successCount[0] + ", Failed: " + errorCount[0],
+                                            Toast.LENGTH_LONG).show();
+                                }
+                            }) {
+                        @Override
+                        public Map<String, String> getHeaders() {
+                            Map<String, String> headers = new HashMap<>();
+                            headers.put("Authorization", "Bearer " + authToken);
+                            return headers;
+                        }
+                    };
+
+                    requestQueue.add(request);
+
+                } catch (JSONException e) {
+                    Log.e("CreateAssessment", "JSON error: " + e.getMessage());
+                    progressDialog.dismiss();
+                }
+            }
+        });
     }
-    private void loadCoursesForAssignments() {
-        String coursesUrl = BASE_URL + "courses/list.php";
 
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, coursesUrl, null,
+    private void getStudents(String classNum, String classBranch, TeacherDashboardActivity.DataLoadCallback callback) {
+        String url = BASE_URL + "students/list.php?class_num=" + classNum + "&class_branch=" + classBranch;
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
                         if (response.getString("status").equals("success")) {
-                            JSONArray dataArray = response.getJSONArray("data");
-                            List<String> courseNames = new ArrayList<>();
-                            List<Integer> courseIds = new ArrayList<>();
-
-                            for (int i = 0; i < dataArray.length(); i++) {
-                                JSONObject course = dataArray.getJSONObject(i);
-                                courseNames.add(course.getString("course_name"));
-                                courseIds.add(course.getInt("course_id"));
-                            }
-
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                                    android.R.layout.simple_spinner_item, courseNames);
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            assignmentCourseSpinner.setAdapter(adapter);
-                            assignmentCourseSpinner.setTag(courseIds);
+                            JSONArray data = response.getJSONArray("data");
+                            callback.onDataLoaded(new ArrayList<>(), data);
+                        } else {
+                            callback.onDataLoaded(new ArrayList<>(), null);
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e("getStudents", "Parse error: " + e.getMessage());
+                        callback.onDataLoaded(new ArrayList<>(), null);
                     }
                 },
-                error -> Toast.makeText(this, "Error loading courses", Toast.LENGTH_SHORT).show()) {
-
+                error -> {
+                    Log.e("getStudents", "Volley error: " + error.toString());
+                    callback.onDataLoaded(new ArrayList<>(), null);
+                }) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
@@ -219,35 +286,30 @@ public class CreateAssessment extends AppCompatActivity {
         requestQueue.add(request);
     }
 
-    private void loadClassesAndCourses() {
-        // Load classes
-        String classesUrl = BASE_URL + "classes/list.php";
+    private void loadClasses(TeacherDashboardActivity.DataLoadCallback callback) {
+        String url = BASE_URL + "teachers/listClasses.php?teacher_id=" + teacherId + "&term_id=" + termID + "&year_id=" + yearID;
 
-        JsonObjectRequest classesRequest = new JsonObjectRequest(Request.Method.GET, classesUrl, null,
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 response -> {
                     try {
                         if (response.getString("status").equals("success")) {
-                            JSONArray dataArray = response.getJSONArray("data");
-                            List<String> classNames = new ArrayList<>();
-
-                            for (int i = 0; i < dataArray.length(); i++) {
-                                JSONObject classObj = dataArray.getJSONObject(i);
-                                String className = classObj.getString("class_num") +
-                                        classObj.getString("class_branch");
-                                classNames.add(className);
+                            JSONArray data = response.getJSONArray("data");
+                            List<String> classList = new ArrayList<>();
+                            for (int i = 0; i < data.length(); i++) {
+                                JSONObject obj = data.getJSONObject(i);
+                                classList.add(obj.getString("class_num") + " " + obj.getString("class_branch"));
                             }
-
-                            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
-                                    android.R.layout.simple_spinner_item, classNames);
-                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                            assignmentClassSpinner.setAdapter(adapter);
+                            callback.onDataLoaded(classList, data);
                         }
                     } catch (JSONException e) {
-                        e.printStackTrace();
+                        Log.e("loadClasses", "JSONException: " + e.getMessage());
+                        callback.onDataLoaded(new ArrayList<>(), null);
                     }
                 },
-                error -> Toast.makeText(this, "Error loading classes", Toast.LENGTH_SHORT).show()) {
-
+                error -> {
+                    Log.e("loadClasses", "Volley error: " + error.toString());
+                    callback.onDataLoaded(new ArrayList<>(), null);
+                }) {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
@@ -256,14 +318,6 @@ public class CreateAssessment extends AppCompatActivity {
             }
         };
 
-        requestQueue.add(classesRequest);
-
-        // Load courses for assignments
-        loadCoursesForAssignments();
+        requestQueue.add(request);
     }
-    private String getCurrentDate() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-        return sdf.format(Calendar.getInstance().getTime());
-    }
-
 }

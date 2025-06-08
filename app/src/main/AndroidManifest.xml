@@ -36,6 +36,10 @@
             android:exported="false" />
         <activity android:name=".CreateAssessment"
             android:exported="false" />
+        <activity android:name=".MarkAttendance"
+            android:exported="false" />
+        <activity android:name=".ReportAttendance"
+            android:exported="false" />
         <activity
             android:name=".addStudent"
             android:exported="false" />

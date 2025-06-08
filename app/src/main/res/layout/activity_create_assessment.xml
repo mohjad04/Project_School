@@ -8,7 +8,6 @@
         android:orientation="vertical"
         android:layout_marginTop="16dp"
         android:background="@drawable/gradient_background"
-        xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <androidx.cardview.widget.CardView
@@ -28,7 +27,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Send Assignment"
+                    android:text="Send Assessment"
                     android:textColor="#3fa9d1"
                     android:textSize="24sp"
                     android:fontFamily="@font/dam"
@@ -90,29 +89,6 @@
                     android:hint="Enter assignment title"
                     android:layout_marginBottom="16dp" />
 
-                <!-- Assignment Description -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Assignment Description"
-                    android:textColor="#494747"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/dam"
-                    android:layout_marginBottom="8dp" />
-
-                <EditText
-                    android:id="@+id/assignment_description_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="120dp"
-                    android:background="@drawable/edittext_background"
-                    android:padding="12dp"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/dam"
-                    android:hint="Enter assignment description and instructions"
-                    android:gravity="top"
-                    android:inputType="textMultiLine"
-                    android:layout_marginBottom="16dp" />
-
                 <!-- Assessment Type -->
                 <TextView
                     android:layout_width="wrap_content"
@@ -128,27 +104,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="@drawable/edittext_background"
-                    android:layout_marginBottom="16dp" />
-
-                <!-- Assessment Name -->
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Assessment Name"
-                    android:textColor="#494747"
-                    android:textSize="16sp"
-                    android:fontFamily="@font/dam"
-                    android:layout_marginBottom="8dp" />
-
-                <EditText
-                    android:id="@+id/assessment_name_edit"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:background="@drawable/edittext_background"
-                    android:padding="12dp"
-                    android:textSize="14sp"
-                    android:fontFamily="@font/dam"
-                    android:hint="Enter assessment name"
                     android:layout_marginBottom="16dp" />
 
                 <!-- Score and Max Score Row -->
@@ -181,7 +136,7 @@
                             android:background="@drawable/edittext_background"
                             android:padding="12dp"
                             android:textSize="14sp"
-                            android:hint="85"
+                            android:hint="-1 is assigned as default"
                             android:inputType="numberDecimal" />
 
                     </LinearLayout>
@@ -282,7 +237,6 @@
                     android:background="@drawable/edittext_background"
                     android:padding="12dp"
                     android:textSize="14sp"
-                    android:fontFamily="@font/dam"
                     android:hint="Select due date"
                     android:focusable="false"
                     android:clickable="true"
@@ -293,7 +247,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:background="@drawable/button_background"
-                    android:text="Send Assignment"
+                    android:text="Send"
                     android:textColor="@android:color/white"
                     android:textSize="16sp"
                     android:fontFamily="@font/dam"
@@ -302,6 +256,5 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-
     </LinearLayout>
 </ScrollView>

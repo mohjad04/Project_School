@@ -1,6 +1,5 @@
 package com.example.project_school;
 
-import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,11 +8,9 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -28,12 +25,9 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 public class TeacherDashboardActivity extends AppCompatActivity {
@@ -48,13 +42,13 @@ public class TeacherDashboardActivity extends AppCompatActivity {
 
     // UI Components
     private GridLayout mainGrid;
-    private LinearLayout marksContainer;
+    private LinearLayout marksContainer, reportsContainer;
 
     // Marks components
     private Spinner classSpinner;
     private Spinner courseSpinner;
 
-    private Button loadStudentsBtn;
+    private Button loadStudentsBtn, markAttendanceBtn, reportAttendanceBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,21 +67,22 @@ public class TeacherDashboardActivity extends AppCompatActivity {
         termID = sharedPreferences.getInt("current_term", -1);
         yearID = sharedPreferences.getInt("current_year", -1);
 
-        // Find views
         mainGrid = findViewById(R.id.main_grid);
         marksContainer = findViewById(R.id.marks_container);
+        reportsContainer = findViewById(R.id.reports_container);
 
-        // Marks views
         classSpinner = findViewById(R.id.class_spinner);
         courseSpinner = findViewById(R.id.course_spinner);
         loadStudentsBtn = findViewById(R.id.load_students_btn);
+
+        markAttendanceBtn = findViewById(R.id.mark_attendance);
+        reportAttendanceBtn = findViewById(R.id.report_attendance);
 
 
     }
 
     private void setupUI() {
 
-        // Setup click listeners
         loadStudentsBtn.setOnClickListener(v -> {
             String selectedClass = classSpinner.getSelectedItem().toString();
             String selectedCourse = courseSpinner.getSelectedItem().toString();
@@ -100,7 +95,16 @@ public class TeacherDashboardActivity extends AppCompatActivity {
             startActivity(intent);
         });
 
-        // Setup main grid click listeners
+        markAttendanceBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(TeacherDashboardActivity.this, MarkAttendance.class);
+            startActivity(intent);
+        });
+
+        reportAttendanceBtn.setOnClickListener(v -> {
+            Intent intent = new Intent(TeacherDashboardActivity.this, ReportAttendance.class);
+            startActivity(intent);
+        });
+
         setupGridClickListeners();
     }
 
@@ -108,6 +112,7 @@ public class TeacherDashboardActivity extends AppCompatActivity {
         CardView scheduleCard = findViewById(R.id.schedule_card);
         CardView marksCard = findViewById(R.id.marks_card);
         CardView assignmentCard = findViewById(R.id.assignment_card);
+        CardView reportsCard = findViewById(R.id.reports_card);
 
         scheduleCard.setOnClickListener(v -> {
             Intent intent = new Intent(TeacherDashboardActivity.this, TeacherScheduleActivity.class);
@@ -163,6 +168,10 @@ public class TeacherDashboardActivity extends AppCompatActivity {
             Intent intent = new Intent(TeacherDashboardActivity.this, CreateAssessment.class);
             startActivity(intent);
         });
+
+        reportsCard.setOnClickListener(v -> {
+            toggleVisibility(reportsContainer);
+        });
     }
 
     private void toggleVisibility(LinearLayout container) {
@@ -174,7 +183,7 @@ public class TeacherDashboardActivity extends AppCompatActivity {
         }
     }
 
-    private void loadClasses(ClassLoadCallback callback) {
+    private void loadClasses(DataLoadCallback callback) {
         String classesUrl = BASE_URL + "teachers/listClasses.php?teacher_id=" + teacherId +
                 "&term_id=" + termID + "&year_id=" + yearID;
 
@@ -197,17 +206,17 @@ public class TeacherDashboardActivity extends AppCompatActivity {
                             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
                             classSpinner.setAdapter(adapter);
 
-                            callback.onClassesLoaded(classes, dataArray);
+                            callback.onDataLoaded(classes, dataArray);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        callback.onClassesLoaded(new ArrayList<>(), null);
+                        callback.onDataLoaded(new ArrayList<>(), null);
                     }
                 },
                 error -> {
                     Toast.makeText(this, "No classes found", Toast.LENGTH_SHORT).show();
                     Log.e("Volley", "Error loading classes: " + error.toString());
-                    callback.onClassesLoaded(new ArrayList<>(), null);
+                    callback.onDataLoaded(new ArrayList<>(), null);
                 }) {
 
             @Override
@@ -221,7 +230,6 @@ public class TeacherDashboardActivity extends AppCompatActivity {
         requestQueue.add(classesRequest);
     }
 
-    // ScheduleItem class (kept for compatibility)
     public static class TeacherScheduleItem {
         private String courseName;
         private String className;
@@ -233,7 +241,6 @@ public class TeacherDashboardActivity extends AppCompatActivity {
             this.dayTimeList = new ArrayList<>();
         }
 
-        // Add a day/time entry
         public void addDayTime(String dayOfWeek, String startTime, String endTime) {
             String timeString = dayOfWeek + ": " + startTime + " - " + endTime;
             this.dayTimeList.add(timeString);
@@ -245,8 +252,8 @@ public class TeacherDashboardActivity extends AppCompatActivity {
         public List<String> getDayTimeList() { return dayTimeList; }
     }
 
-    public interface ClassLoadCallback {
-        void onClassesLoaded(List<String> classList, JSONArray rawData);
+    public interface DataLoadCallback {
+        void onDataLoaded(List<String> dataList, JSONArray rawData);
     }
 
 

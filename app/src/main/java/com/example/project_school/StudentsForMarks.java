@@ -59,9 +59,8 @@ public class StudentsForMarks extends AppCompatActivity {
         yearID = sharedPreferences.getInt("current_year", -1);
         loadStudents();
         students.setOnItemClickListener((parent, view, position, id) -> {
-            String selected = studentsData.get(position); // Use the correct list
+            String selected = studentsData.get(position);
 
-            // Assume selected = "Alice Smith 2"
             String[] parts = selected.split(" ");
             int studentId = Integer.parseInt(parts[parts.length - 2]);
 
@@ -70,7 +69,7 @@ public class StudentsForMarks extends AppCompatActivity {
             intent1.putExtra("term_id", termID);
             intent1.putExtra("year_id", yearID);
             intent1.putExtra("teacher_id", teacherId);
-            intent1.putExtra("course_id", courseID); // Set this correctly
+            intent1.putExtra("course_id", courseID);
             startActivity(intent1);
         });
 
