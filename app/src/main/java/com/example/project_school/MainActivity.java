@@ -97,7 +97,10 @@ public class MainActivity extends AppCompatActivity {
                                                 Intent intent;
                                                 switch (role.toLowerCase()) {
                                                     case "student":
-                                                        intent = new Intent(MainActivity.this, HomePage.class); break;
+                                                        intent = new Intent(MainActivity.this, HomePage.class);
+                                                        intent.putExtra("ID",user);
+
+                                                        break;
                                                     case "registrar":
                                                         intent = new Intent(MainActivity.this, RegHome.class); break;
                                                     case "teacher":
