@@ -85,7 +85,6 @@
                     android:background="@drawable/edittext_background"
                     android:padding="12dp"
                     android:textSize="14sp"
-                    android:fontFamily="@font/dam"
                     android:hint="Enter assignment title"
                     android:layout_marginBottom="16dp" />
 
@@ -192,7 +191,6 @@
                         android:background="@drawable/edittext_background"
                         android:padding="12dp"
                         android:textSize="14sp"
-                        android:fontFamily="@font/dam"
                         android:hint="Enter remarks (optional)"
                         android:gravity="top"
                         android:inputType="textMultiLine"
