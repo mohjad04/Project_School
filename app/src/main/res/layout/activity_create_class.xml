@@ -80,12 +80,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="18dp"
-                android:focusable="false"
-                android:textColor="#000000"
-                android:clickable="true"
                 android:background="@drawable/edittext_background"
-                android:hint="Brancj eg:A,B,C..."
-                android:padding="12dp" />
+                android:hint="Branch eg:A,B,C..."
+                android:padding="12dp"
+                android:textColor="#000000" />
 
 
             <Spinner

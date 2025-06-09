@@ -32,6 +32,8 @@ public class YearTerm extends AppCompatActivity {
     int createdYearId = -1;
     String yearName = "";
 
+    List<Integer> yearIds = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,7 +48,7 @@ public class YearTerm extends AppCompatActivity {
         createTermBtn = findViewById(R.id.createTbtn);
 
         isCurrentSpinner = findViewById(R.id.year_spinner);
-        yearSelectSpinner = findViewById(R.id.term_year_spinner); // This spinner will hold fetched years from DB
+        yearSelectSpinner = findViewById(R.id.term_year_spinner);
         termTypeSpinner = findViewById(R.id.term_type_spinner);
 
         // Static options for is_current spinner
@@ -54,7 +56,7 @@ public class YearTerm extends AppCompatActivity {
                 android.R.layout.simple_spinner_item, new String[]{"true", "false"});
         isCurrentSpinner.setAdapter(currentAdapter);
 
-        // Static term types
+        // Static options for term type
         ArrayAdapter<String> termAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, new String[]{"First Term", "Second Term"});
         termTypeSpinner.setAdapter(termAdapter);
@@ -66,6 +68,9 @@ public class YearTerm extends AppCompatActivity {
         yearEnd.setOnClickListener(v -> showDatePicker(yearEnd));
         termStart.setOnClickListener(v -> showDatePicker(termStart));
         termEnd.setOnClickListener(v -> showDatePicker(termEnd));
+
+        // Fetch available years from server
+        fetchAllAcademicYears();
     }
 
     private void showDatePicker(EditText target) {
@@ -99,15 +104,51 @@ public class YearTerm extends AppCompatActivity {
         }
     }
 
+    private void fetchAllAcademicYears() {
+        String url = getString(R.string.URL) + "academic_year/list.php";
+        String token = getSharedPreferences("MyPrefs", MODE_PRIVATE).getString("auth_token", "");
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
+                response -> {
+                    try {
+                        List<String> yearNames = new ArrayList<>();
+                        yearIds.clear();
+
+                        if (response.getString("status").equals("success")) {
+                            for (int i = 0; i < response.getJSONArray("data").length(); i++) {
+                                JSONObject year = response.getJSONArray("data").getJSONObject(i);
+                                yearNames.add(year.getString("year_name"));
+                                yearIds.add(year.getInt("year_id"));
+                            }
+
+                            ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                                    android.R.layout.simple_spinner_item, yearNames);
+                            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                            yearSelectSpinner.setAdapter(adapter);
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        Toast.makeText(this, "Failed to parse academic years", Toast.LENGTH_SHORT).show();
+                    }
+                },
+                error -> Toast.makeText(this, "Error fetching academic years", Toast.LENGTH_SHORT).show()) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + token);
+                return headers;
+            }
+        };
+
+        Volley.newRequestQueue(this).add(request);
+    }
 
     private void createAcademicYear() {
         String start = yearStart.getText().toString();
         String end = yearEnd.getText().toString();
         String isCurrent = isCurrentSpinner.getSelectedItem().toString();
-        int curr =0;
-        if (isCurrent.equalsIgnoreCase("true")){
-            curr=1;
-        }
+
+        int curr = isCurrent.equalsIgnoreCase("true") ? 1 : 0;
 
         if (start.isEmpty() || end.isEmpty()) {
             Toast.makeText(this, "Please select both start and end dates", Toast.LENGTH_SHORT).show();
@@ -134,6 +175,7 @@ public class YearTerm extends AppCompatActivity {
                         if (response.getString("status").equals("success")) {
                             createdYearId = response.getJSONObject("data").getInt("year_id");
                             Toast.makeText(this, "Academic year created", Toast.LENGTH_SHORT).show();
+                            fetchAllAcademicYears(); // refresh spinner list
                         } else {
                             Toast.makeText(this, response.getString("message"), Toast.LENGTH_SHORT).show();
                         }
@@ -159,14 +201,17 @@ public class YearTerm extends AppCompatActivity {
     }
 
     private void createTerm() {
-        if (createdYearId == -1) {
-            Toast.makeText(this, "Please create an academic year first", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         String start = termStart.getText().toString();
         String end = termEnd.getText().toString();
         String termName = termTypeSpinner.getSelectedItem().toString();
+
+        int selectedYearIndex = yearSelectSpinner.getSelectedItemPosition();
+        if (selectedYearIndex == -1 || selectedYearIndex >= yearIds.size()) {
+            Toast.makeText(this, "Please select a valid year", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int yearId = yearIds.get(selectedYearIndex);
 
         if (start.isEmpty() || end.isEmpty()) {
             Toast.makeText(this, "Please select both term start and end dates", Toast.LENGTH_SHORT).show();
@@ -176,10 +221,10 @@ public class YearTerm extends AppCompatActivity {
         JSONObject jsonBody = new JSONObject();
         try {
             jsonBody.put("term_name", termName);
-            jsonBody.put("year_id", createdYearId); // Will change later to use selected spinner value
+            jsonBody.put("year_id", yearId);
             jsonBody.put("start_date", start);
             jsonBody.put("end_date", end);
-            jsonBody.put("is_current", 1);
+            jsonBody.put("is_current", 0);
         } catch (JSONException e) {
             e.printStackTrace();
             return;
