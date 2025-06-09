@@ -77,6 +77,18 @@
         <activity
             android:name=".HomePage"
             android:exported="false" />
+
+        <activity
+            android:name=".StudentAttendanceReportActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".AssessmentsCalendar"
+            android:exported="false" />
+
+
+
+
         <activity
             android:name=".basicDesign"
             android:exported="false" />
