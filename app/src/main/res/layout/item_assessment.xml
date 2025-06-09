@@ -55,6 +55,26 @@
             android:textSize="14sp"
             android:layout_marginBottom="8dp" />
 
+        <!-- Max Score -->
+        <TextView
+            android:id="@+id/max_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Max Score: 100"
+            android:textColor="#494747"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Percentage -->
+        <TextView
+            android:id="@+id/percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Percentage: 10%"
+            android:textColor="#494747"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
         <!-- Score Input -->
         <EditText
             android:id="@+id/score"

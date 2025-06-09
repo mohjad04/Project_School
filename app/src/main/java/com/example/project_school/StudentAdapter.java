@@ -72,15 +72,15 @@ class StudentAdapter extends RecyclerView.Adapter<StudentAdapter.StudentViewHold
             }
         });
 
-        holder.iconEmail.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.onEmailClick(student.getEmail());
-            }
-        });
-
         holder.cardView.setOnClickListener(v -> {
             if (listener != null) {
                 listener.onStudentClick(student);
+            }
+        });
+
+        holder.iconEmail.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onEmailClick(student.getEmail());
             }
         });
 

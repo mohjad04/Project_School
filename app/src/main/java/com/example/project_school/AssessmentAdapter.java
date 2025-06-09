@@ -43,7 +43,7 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
     }
 
     public static class AssessmentViewHolder extends RecyclerView.ViewHolder {
-        TextView name, type, date, remarks;
+        TextView name, type, date, remarks, percentage, maxScore;
         EditText score;
         Button saveBtn;
 
@@ -52,6 +52,8 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
             name = itemView.findViewById(R.id.name);
             type = itemView.findViewById(R.id.type);
             date = itemView.findViewById(R.id.date);
+            maxScore = itemView.findViewById(R.id.max_score);
+            percentage = itemView.findViewById(R.id.percentage);
             remarks = itemView.findViewById(R.id.remarks);
             score = itemView.findViewById(R.id.score);
             saveBtn = itemView.findViewById(R.id.saveBtn);
@@ -72,6 +74,8 @@ public class AssessmentAdapter extends RecyclerView.Adapter<AssessmentAdapter.As
         holder.type.setText("Type: " + a.type);
         holder.date.setText("Date: " + a.date);
         holder.remarks.setText("Remarks: " + a.remarks);
+        holder.percentage.setText("Percentage: " + a.percentage + "%");
+        holder.maxScore.setText("Max Score: " + a.maxScore);
         holder.score.setText(String.valueOf(a.score));
 
         holder.saveBtn.setOnClickListener(v -> {

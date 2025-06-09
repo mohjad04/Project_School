@@ -312,11 +312,9 @@ public class ParentActivity extends AppCompatActivity implements StudentAdapter.
 
     @Override
     public void onStudentClick(Student student) {
-        // Handle student item click - can open student details activity
-        Toast.makeText(this, "Selected: " + student.getName(), Toast.LENGTH_SHORT).show();
         int student_id = student.getStudentId();
         Intent intent = new Intent(ParentActivity.this, HomePage.class);
-        intent.putExtra("student_id", student_id);
+        intent.putExtra("ID", student_id+"");
         startActivity(intent);
     }
 

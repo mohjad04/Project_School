@@ -64,13 +64,12 @@ public class studentSchedule extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish(); // للعودة إلى الشاشة السابقة
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    // باقي الدوال تبقى كما هي بدون تغيير
     private void fetchSchedule(String classNum, String classBranch, int termId) {
         String url = getString(R.string.URL) + "schedule/class.php?class_num=" + classNum + "&class_branch=" + classBranch + "&term_id=" + termId;
         Log.i("DATA", url);
