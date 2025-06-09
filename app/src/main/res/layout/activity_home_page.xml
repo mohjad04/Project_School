@@ -231,19 +231,19 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:contentDescription="Assignment"
-                    android:src="@drawable/course" />
+                    android:src="@drawable/absenteeism" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Courses"
+                    android:text="My absences"
                     android:textColor="#000"
                     android:textSize="14sp" />
 
                 <android.widget.Button
 
-                    android:id="@+id/myCoursesBtn"
+                    android:id="@+id/myAbsencesBtn"
                     android:layout_width="130dp"
                     android:layout_height="30dp"
                     android:layout_marginTop="8dp"
@@ -252,9 +252,58 @@
                     android:textColor="#FFFFFF"
                     android:background="@drawable/button_rounded_blue"
                     android:backgroundTint="@null" />
+
+
+
+
+
+
+
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_margin="8dp"
+                android:background="#F4F4F9"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="12dp">
 
+                <ImageView
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:contentDescription="Assignment"
+                    android:src="@drawable/calendar" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="My Calendar"
+                    android:textColor="#000"
+                    android:textSize="14sp" />
+
+                <android.widget.Button
+
+                    android:id="@+id/myCalendarBtn"
+                    android:layout_width="130dp"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="8dp"
+                    android:text="View"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/button_rounded_blue"
+                    android:backgroundTint="@null" />
+
+
+
+
+
+
+
+            </LinearLayout>
 
         </GridLayout>
     </LinearLayout>

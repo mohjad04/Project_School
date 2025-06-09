@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -315,23 +316,29 @@ public class ReportAttendance extends AppCompatActivity {
         public String getCreatedAt() { return createdAt; }
     }
 
-    private class AttendanceReportAdapter extends RecyclerView.Adapter<AttendanceReportAdapter.ViewHolder> {
+    public static class AttendanceReportAdapter extends RecyclerView.Adapter<AttendanceReportAdapter.ViewHolder> {
         private List<AttendanceRecord> records;
+        private boolean readOnly = false;
 
         public AttendanceReportAdapter(List<AttendanceRecord> records) {
             this.records = records;
         }
 
+
+        public void setReadOnly(boolean readOnly) {
+            this.readOnly = readOnly;
+        }
+
         @Override
         public ViewHolder onCreateViewHolder(android.view.ViewGroup parent, int viewType) {
-            View view = getLayoutInflater().inflate(R.layout.item_attendance_report, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_attendance_report, parent, false);
             return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(ViewHolder holder, int position) {
             AttendanceRecord record = records.get(position);
-            holder.bind(record);
+            holder.bind(record, readOnly);
         }
 
         @Override
@@ -354,7 +361,7 @@ public class ReportAttendance extends AppCompatActivity {
                 statusIndicator = itemView.findViewById(R.id.statusIndicator);
             }
 
-            public void bind(AttendanceRecord record) {
+            public void bind(AttendanceRecord record, boolean readOnly) {
                 studentNameTextView.setText(record.getStudentName());
                 statusTextView.setText(record.getStatus().toUpperCase());
                 dateTextView.setText(record.getDate());
@@ -364,25 +371,31 @@ public class ReportAttendance extends AppCompatActivity {
                 int statusColor;
                 switch (record.getStatus()) {
                     case "present":
-                        statusColor = getResources().getColor(android.R.color.holo_green_dark);
+                        statusColor = itemView.getResources().getColor(android.R.color.holo_green_dark);
                         break;
                     case "absent":
-                        statusColor = getResources().getColor(android.R.color.holo_red_dark);
+                        statusColor = itemView.getResources().getColor(android.R.color.holo_red_dark);
                         break;
                     case "late":
-                        statusColor = getResources().getColor(android.R.color.holo_orange_dark);
+                        statusColor = itemView.getResources().getColor(android.R.color.holo_orange_dark);
                         break;
                     case "sick":
-                        statusColor = getResources().getColor(android.R.color.holo_purple);
+                        statusColor = itemView.getResources().getColor(android.R.color.holo_purple);
                         break;
                     default:
-                        statusColor = getResources().getColor(android.R.color.darker_gray);
+                        statusColor = itemView.getResources().getColor(android.R.color.darker_gray);
                         break;
                 }
 
                 statusTextView.setTextColor(statusColor);
                 statusIndicator.setBackgroundColor(statusColor);
+
+                if (readOnly) {
+                    statusTextView.setEnabled(false);
+                    remarksTextView.setEnabled(false);
+                }
             }
         }
     }
+
 }
