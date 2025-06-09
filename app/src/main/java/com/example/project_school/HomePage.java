@@ -134,7 +134,6 @@ public class HomePage extends AppCompatActivity {
                                 classBranch = student.getString("class_branch");
                                 studentName = student.getString("name");
 
-
                                 txtStudentName.setText(studentName);
                                 txtClassNum.setText(classNum+" "+classBranch);                            }
                         }

@@ -71,6 +71,10 @@
             android:name=".ReportAttendance"
             android:exported="false" />
         <activity
+            android:name=".ParentActivity"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
             android:name=".addStudent"
             android:exported="false" />
         <activity

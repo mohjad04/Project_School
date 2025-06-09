@@ -12,7 +12,6 @@ public class Student {
     private String status;
     private String bloodGroup;
 
-    // Constructors
     public Student() {}
 
     public Student(int studentId, String name, String email, String phone,
@@ -29,7 +28,6 @@ public class Student {
         this.bloodGroup = bloodGroup;
     }
 
-    // Getters and Setters
     public int getStudentId() { return studentId; }
     public void setStudentId(int studentId) { this.studentId = studentId; }
 
