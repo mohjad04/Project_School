@@ -23,8 +23,8 @@ import java.util.Map;
 
 public class AddParent extends AppCompatActivity {
     private ListView studentListView;
-    private List<Student> studentList = new ArrayList<>();
-    private StudentAdapter adapter;
+    private List<Student2> studentList = new ArrayList<>();
+    private StudentAdapter2 adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,13 +33,13 @@ public class AddParent extends AppCompatActivity {
         Intent intent = getIntent();
 
         studentListView = findViewById(R.id.student_list_view);
-        adapter = new StudentAdapter(this, studentList);
+        adapter = new StudentAdapter2(this, studentList);
         studentListView.setAdapter(adapter);
 
         fetchStudents();
 
         studentListView.setOnItemClickListener((parent, view, position, id) -> {
-            Student selectedStudent = studentList.get(position);
+            Student2 selectedStudent = studentList.get(position);
             String studentId = selectedStudent.getId();
             String studentName = selectedStudent.getName();
 
@@ -58,14 +58,14 @@ public class AddParent extends AppCompatActivity {
                 response -> {
                     try {
                         JSONArray data = response.getJSONArray("data");
-                        List<Student> newStudents = new ArrayList<>();
+                        List<Student2> newStudents = new ArrayList<>();
 
                         for (int i = 0; i < data.length(); i++) {
                             JSONObject item = data.getJSONObject(i);
                             String id = item.getString("student_id");
                             String name = item.getString("name");
 
-                            newStudents.add(new Student(id, name));
+                            newStudents.add(new Student2(id, name));
                         }
 
                         studentList.clear();
