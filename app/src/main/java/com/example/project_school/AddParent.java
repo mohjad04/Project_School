@@ -29,7 +29,7 @@ public class AddParent extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_pernat);
+        setContentView(R.layout.activity_add_parent);
         Intent intent = getIntent();
 
         studentListView = findViewById(R.id.student_list_view);
