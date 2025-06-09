@@ -19,9 +19,7 @@
         android:theme="@style/Theme.Project_School"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
-        <activity
-            android:name=".YearTerm"
-            android:exported="false" />
+
         <activity
             android:name=".AvailableParents"
             android:exported="false" />
@@ -55,28 +53,18 @@
         <activity
             android:name=".TeacherDashboardActivity"
             android:exported="false" />
-        <activity
-            android:name=".TeacherScheduleActivity"
+        <activity android:name=".TeacherScheduleActivity"
             android:exported="false" />
-        <activity
-            android:name=".StudentsForMarks"
+        <activity android:name=".StudentsForMarks"
             android:exported="false" />
-        <activity
-            android:name=".AssessmentActivity"
+        <activity android:name=".AssessmentActivity"
             android:exported="false" />
-        <activity
-            android:name=".CreateAssessment"
+        <activity android:name=".CreateAssessment"
             android:exported="false" />
-        <activity
-            android:name=".MarkAttendance"
+        <activity android:name=".MarkAttendance"
             android:exported="false" />
-        <activity
-            android:name=".ReportAttendance"
+        <activity android:name=".ReportAttendance"
             android:exported="false" />
-        <activity
-            android:name=".ParentActivity"
-            android:exported="true"
-            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".addStudent"
             android:exported="false" />

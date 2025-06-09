@@ -29,7 +29,7 @@ import java.util.Map;
 
 public class HomePage extends AppCompatActivity {
 
-    private Button myCoursesBtn,myAssignmentsBtn,myMarksBtn,mySchduleBtn;
+    private Button myAbsencesBtn,myAssignmentsBtn,myMarksBtn,mySchduleBtn,myCalendarBtn;
     private TextView txtClassNum,txtStudentName;
     String studentId,studentName;
     String classNum,classBranch;
@@ -51,6 +51,7 @@ public class HomePage extends AppCompatActivity {
         setMarksBtn();
         setAssignmentsBtn();
         setCoursesBtn();
+        setCalendarBtn();
         fetchStudentClassInfo(studentId);
 
 
@@ -62,7 +63,8 @@ public class HomePage extends AppCompatActivity {
         mySchduleBtn=findViewById(R.id.mySchduleBtn);
         myMarksBtn=findViewById(R.id.myMarksBtn);
         myAssignmentsBtn=findViewById(R.id.myAssignmentsBtn);
-        myCoursesBtn=findViewById(R.id.myCoursesBtn);
+        myAbsencesBtn=findViewById(R.id.myAbsencesBtn);
+        myCalendarBtn=findViewById(R.id.myCalendarBtn);
     }
 
     private void setScheduleBtn(){
@@ -105,10 +107,10 @@ public class HomePage extends AppCompatActivity {
     }
 
     private void setCoursesBtn(){
-        myCoursesBtn.setOnClickListener(new View.OnClickListener(){
+        myAbsencesBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomePage.this,studentSchedule.class);
+                Intent intent = new Intent(HomePage.this,StudentAttendanceReportActivity.class);
                 // intent.putExtra("NAME",userName);
 
                 startActivity(intent);
@@ -116,6 +118,18 @@ public class HomePage extends AppCompatActivity {
         });
     }
 
+
+    private void setCalendarBtn(){
+        myCalendarBtn.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(HomePage.this,AssessmentsCalendar.class);
+                // intent.putExtra("NAME",userName);
+
+                startActivity(intent);
+            }
+        });
+    }
 
     private void fetchStudentClassInfo(String studentId) {
         String url = getString(R.string.URL) + "students/list.php?student_id=" + studentId;
