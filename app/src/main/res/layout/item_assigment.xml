@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="12dp"
+    android:layout_margin="8dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Assessment Name -->
+        <TextView
+            android:id="@+id/AssName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Assessment Name"
+            android:textSize="18sp"
+            android:textColor="#3fa9d1"
+            android:textStyle="bold"
+            android:fontFamily="@font/dam"
+            android:layout_marginBottom="4dp" />
+
+
+
+        <!-- Date -->
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Date: 2025-06-10"
+            android:textColor="#494747"
+            android:textSize="14sp"
+            android:layout_marginBottom="2dp" />
+
+        <!-- Remarks -->
+        <TextView
+            android:id="@+id/remarks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Remarks: Chapter 1"
+            android:textColor="#494747"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+
+
+
+        <!-- Submmit Input -->
+        <EditText
+            android:id="@+id/remarks_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter URL"
+            android:backgroundTint="#3fa9d1"
+            android:padding="8dp"
+            android:textColor="#000"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/submitBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:textColor="#FFFFFF"
+            android:backgroundTint="#3fa9d1"
+            android:layout_gravity="end" />
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

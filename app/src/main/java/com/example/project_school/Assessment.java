@@ -6,7 +6,7 @@ import org.json.JSONObject;
 
 public class Assessment {
     public int assessmentId;
-    public String name, type, date, remarks;
+    public String name, type, date, remarks,course;
     public double score, maxScore, percentage;
 
     public Assessment(JSONObject obj) throws JSONException {
@@ -15,6 +15,7 @@ public class Assessment {
         type = obj.getString("assessment_type");
         date = obj.getString("date_assessed");
         remarks = obj.getString("remarks");
+        course= obj.getString("course_name");
         score = obj.getDouble("score");
         maxScore = obj.getDouble("max_score");
         percentage = obj.getDouble("percentage");

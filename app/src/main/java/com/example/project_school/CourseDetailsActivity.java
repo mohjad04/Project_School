@@ -1,5 +1,6 @@
 package com.example.project_school;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -70,7 +71,12 @@ public class CourseDetailsActivity extends AppCompatActivity {
         if (source.equals("grades")) {
             loadGrades();
         } else if (source.equals("assignments")) {
-          //  loadAssignments();
+            Intent intent = new Intent(CourseDetailsActivity.this, AssignmentActivity.class);
+            intent.putExtra("ID",studentId);
+            intent.putExtra("term_id",termID)  ;
+            intent.putExtra("course_id",courseId);
+            startActivity(intent);
+
         } else {
             txtContent.setText("Unknown source");
         }
