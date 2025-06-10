@@ -28,7 +28,8 @@ public class AssignmentActivity extends AppCompatActivity {
     private TextView noAssessmentText;
     private List<Assessment> assessments = new ArrayList<>();
     private AssignmentAdapter adapter;
-    private int studentId, teacherId, termId, courseId;
+    private int   termId, courseId;
+    private String studentId;
     private String BASE_URL, auth_token;
     private SharedPreferences sharedPreferences;
 
@@ -44,7 +45,8 @@ public class AssignmentActivity extends AppCompatActivity {
         adapter = new AssignmentAdapter(this, assessments);
         recyclerView.setAdapter(adapter);
 
-        studentId = getIntent().getIntExtra("ID", -1);
+        studentId = getIntent().getStringExtra("ID");
+        Toast.makeText(AssignmentActivity.this,"id " + studentId,Toast.LENGTH_SHORT).show();
         termId = getIntent().getIntExtra("term_id", -1);
         courseId = getIntent().getIntExtra("course_id", -1);
 
@@ -78,8 +80,9 @@ public class AssignmentActivity extends AppCompatActivity {
 
                                 JSONObject obj = data.getJSONObject(i);
                                 Assessment ass = new Assessment(obj);
-                                if (ass.score==-1&&ass.type.equals("assignment"))
-                                assessments.add(ass);
+                                if (ass.score==-1&&ass.type.equals("assignment")) {
+                                    assessments.add(ass);
+                                }
                             }
                             adapter.notifyDataSetChanged();
                         }
