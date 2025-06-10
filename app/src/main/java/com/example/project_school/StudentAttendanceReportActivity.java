@@ -3,9 +3,11 @@ package com.example.project_school;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,6 +27,7 @@ import java.util.Map;
 public class StudentAttendanceReportActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
+    private Toolbar toolbarAttendance;
     private ReportAttendance.AttendanceReportAdapter adapter;
     private List<ReportAttendance.AttendanceRecord> attendanceRecords;
     private SharedPreferences sharedPreferences;
@@ -35,6 +38,17 @@ public class StudentAttendanceReportActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_attendance_report);
+
+        toolbarAttendance = findViewById(R.id.toolbarAttendance);
+        setSupportActionBar(toolbarAttendance);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
+
+
+
+
+
 
         recyclerView = findViewById(R.id.recyclerViewStudentAttendance);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -51,6 +65,18 @@ public class StudentAttendanceReportActivity extends AppCompatActivity {
 
         fetchAttendanceData();
     }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
 
     private void fetchAttendanceData() {
         String url = BASE_URL + "attendance/report.php?user_id=" + studentId;

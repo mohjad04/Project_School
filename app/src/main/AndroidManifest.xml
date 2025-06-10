@@ -20,6 +20,9 @@
             android:name=".CreateClass"
             android:exported="false" />
         <activity
+            android:name=".AssignmentActivity"
+            android:exported="false" />
+        <activity
             android:name=".YearTerm"
             android:exported="false" />
         <activity
@@ -87,6 +90,12 @@
             android:exported="false" />
         <activity
             android:name=".HomePage"
+            android:exported="false" />
+        <activity
+            android:name=".StudentAttendanceReportActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AssessmentsCalendar"
             android:exported="false" />
         <activity
             android:name=".basicDesign"
