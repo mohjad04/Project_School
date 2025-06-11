@@ -22,14 +22,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:layout_width="wrap_content"
+        <!-- Horizontal bar with left text and right logout button -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Welcome back!!!"
-            android:textColor="#FFFFFF"
-            android:textSize="20sp"
-            android:textStyle="bold" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:layout_width="268dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start"
+                android:text="Welcome back!!!"
+                android:textColor="#FFFFFF"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/logoutbtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:contentDescription="Logout"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:focusable="true"
+                android:padding="8dp"
+                android:src="@drawable/logout" />
+
+            <ImageView
+                android:id="@+id/profilebtn"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_weight="1"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:clickable="true"
+                android:contentDescription="Profile"
+                android:focusable="true"
+                android:padding="8dp"
+                app:srcCompat="@drawable/profile" />
+        </LinearLayout>
     </LinearLayout>
+
 
     <!-- Floating Card -->
     <androidx.cardview.widget.CardView
@@ -62,6 +96,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/nametxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Name"
@@ -70,6 +105,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/typetxt"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Class"

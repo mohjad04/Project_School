@@ -74,15 +74,20 @@ public class MainActivity extends AppCompatActivity {
                 JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, body,
                         response -> {
                             try {
+                                Log.d("LoginResponse: ", response.toString());
                                 JSONObject data = response.getJSONObject("data");
                                 JSONObject userObj = data.getJSONObject("user");
                                 String role = userObj.getString("role");
+
                                 MainActivity.token = data.getString("token");
 
                                 editor.putString("auth_token", MainActivity.token);
                                 editor.putInt("user_id", userObj.getInt("user_id"));
                                 editor.putString("role", role);
                                 editor.putString("name", userObj.getString("name"));
+                                editor.putString("email", userObj.getString("email"));
+                                editor.putString("password", userObj.getString("password"));
+                                editor.putString("phone", userObj.getString("phone"));
 
                                 // GET current term
                                 JsonObjectRequest termRequest = new JsonObjectRequest(Request.Method.GET, getString(R.string.URL) + "terms/list.php?is_current=1", null,

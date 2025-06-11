@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:background="@drawable/dialog_rounded_bg"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/dialogTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Confirm Replacement"
+        android:textSize="20sp"
+        android:textColor="#000000"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:paddingBottom="16dp" />
+
+    <TextView
+        android:id="@+id/dialogMessage"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="This time slot already has a course scheduled. Do you want to replace it?"
+        android:textSize="16sp"
+        android:textColor="#333333"
+        android:gravity="center"
+        android:paddingBottom="24dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/cancelButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Cancel"
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:layout_marginEnd="8dp"
+            android:padding="12dp"
+            android:textAllCaps="false"
+            android:background="@drawable/btn_rounded_red"/>
+
+        <Button
+            android:id="@+id/confirmButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Replace"
+            android:textColor="#FFFFFF"
+            android:layout_weight="1"
+            android:layout_marginStart="8dp"
+            android:padding="12dp"
+            android:textAllCaps="false"
+            android:background="@drawable/button_rounded_light"/>
+    </LinearLayout>
+</LinearLayout>

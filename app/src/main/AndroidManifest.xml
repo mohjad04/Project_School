@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
@@ -19,6 +19,9 @@
         android:theme="@style/Theme.Project_School"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".Profile"
+            android:exported="false" />
         <activity
             android:name=".CreateClass"
             android:exported="false" />
@@ -82,7 +85,7 @@
         <activity
             android:name=".ParentActivity"
             android:exported="true"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".addStudent"
             android:exported="false" />
@@ -102,10 +105,10 @@
             android:name=".StudentAttendanceReportActivity"
             android:exported="false" />
         <activity
-            android:name=".AssessmentsCalendar"
+            android:name=".StudentAttendanceReportActivity"
             android:exported="false" />
         <activity
-            android:name=".StudentAttendanceReportActivity"
+            android:name=".AssessmentsCalendar"
             android:exported="false" />
         <activity
             android:name=".AssessmentsCalendar"

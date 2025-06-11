@@ -77,6 +77,8 @@ public class studentSchedule extends AppCompatActivity {
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
                 res -> {
                     try {
+                        Log.d("LoginResponse", res.toString());
+
                         JSONArray data = res.getJSONArray("data");
                         scheduleList.clear();
                         for (int i = 0; i < data.length(); i++) {
@@ -148,7 +150,7 @@ public class studentSchedule extends AppCompatActivity {
         tv.setTextColor(Color.BLACK);
         tv.setGravity(Gravity.CENTER);
         tv.setPadding(4, 16, 4, 16);
-        tv.setTextSize(10);
+        tv.setTextSize(8);
         tv.setBackgroundResource(android.R.drawable.editbox_background);
         tv.setWidth(200);
         tv.setHeight(130);
