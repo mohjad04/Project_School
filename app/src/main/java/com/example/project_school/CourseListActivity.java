@@ -33,7 +33,7 @@ public class CourseListActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     List<Course> courseList = new ArrayList<>();
     CourseAdapter adapter;
-    String source,studentId;
+    String source,studentId,classNum;
     SharedPreferences sharedPreferences;
 
 
@@ -57,10 +57,12 @@ public class CourseListActivity extends AppCompatActivity {
 
         source = getIntent().getStringExtra("source");
         studentId=getIntent().getStringExtra("ID");
+        classNum=getIntent().getStringExtra("CLASS");
+
         adapter = new CourseAdapter(this, courseList, source,studentId);
         recyclerView.setAdapter(adapter);
 
-        fetchCourses(10);
+        fetchCourses(classNum);
     }
 
 /// for toolbar  (back to home )
@@ -76,9 +78,9 @@ public class CourseListActivity extends AppCompatActivity {
 
 
 
-    private void fetchCourses(int gradeLevel) {
+    private void fetchCourses(String gradeLevel) {
         String url = getString(R.string.URL) + "courses/list.php?grade_level=" + gradeLevel;
-
+Log.i("ERR",url);
         RequestQueue queue = Volley.newRequestQueue(this);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,

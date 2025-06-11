@@ -97,7 +97,7 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
     private void loadGrades() {
         String url = getString(R.string.URL) + "assessments/student.php?student_id=" + studentId + "&term_id="+termID+"&course_id=" + courseId;
-
+                 Log.i("URL",url);
         RequestQueue queue = Volley.newRequestQueue(this);
 
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
@@ -145,36 +145,5 @@ public class CourseDetailsActivity extends AppCompatActivity {
 
 
 
-  /*  private void loadAssignments() {
-        // مثال: الاتصال بـ API لجلب الواجبات
-        String url = "http://yourdomain.com/api/assignments/course.php?course_id=" + courseId;
-        txtContent.setText("Loading assignments for course " + courseId + " ...");
-
-        RequestQueue queue = Volley.newRequestQueue(this);
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, url, null,
-                response -> {
-                    try {
-                        if (response.getString("status").equals("success")) {
-                            JSONArray assignments = response.getJSONArray("assignments");
-                            StringBuilder sb = new StringBuilder("Assignments:\n");
-
-                            for (int i = 0; i < assignments.length(); i++) {
-                                JSONObject a = assignments.getJSONObject(i);
-                                sb.append("- ").append(a.getString("title"))
-                                        .append(" (Due: ").append(a.getString("due_date")).append(")\n");
-                            }
-                            txtContent.setText(sb.toString());
-                        } else {
-                            txtContent.setText("No assignments available.");
-                        }
-                    } catch (JSONException e) {
-                        txtContent.setText("Error parsing assignments.");
-                    }
-                },
-                error -> txtContent.setText("Failed to load assignments: " + error.getMessage())
-        );
-
-        queue.add(request);
-    }*/
 
 }

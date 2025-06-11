@@ -1,6 +1,7 @@
 package com.example.project_school;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -32,7 +33,8 @@ public class HomePage extends AppCompatActivity {
     private Button myAbsencesBtn,myAssignmentsBtn,myMarksBtn,mySchduleBtn,myCalendarBtn;
     private TextView txtClassNum,txtStudentName;
     String studentId,studentName;
-    String classNum,classBranch;
+    String classNum,classBranch,Token;
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,13 +48,16 @@ public class HomePage extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        sharedPreferences = getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+          Token=sharedPreferences.getString("auth_token", "");
         setupViews();
+        fetchStudentClassInfo(studentId);
         setScheduleBtn();
         setMarksBtn();
         setAssignmentsBtn();
         setCoursesBtn();
         setCalendarBtn();
-        fetchStudentClassInfo(studentId);
 
 
     }
@@ -79,29 +84,39 @@ public class HomePage extends AppCompatActivity {
         });
     }
 
-    private void setMarksBtn(){
-        myMarksBtn.setOnClickListener(new View.OnClickListener(){
+    private void setMarksBtn() {
+        myMarksBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomePage.this, CourseListActivity.class);
-                intent.putExtra("source", "grades");
-                intent.putExtra("ID",studentId);
-                intent.putExtra("CLASS",classNum);
-                intent.putExtra("BRANCH",classBranch);
-                startActivity(intent);
-
+                if (classNum != null && classBranch != null) {
+                    Intent intent = new Intent(HomePage.this, CourseListActivity.class);
+                    intent.putExtra("source", "grades");
+                    intent.putExtra("ID", studentId);
+                    intent.putExtra("CLASS", classNum);
+                    intent.putExtra("BRANCH", classBranch);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(HomePage.this, "Please wait, loading student info...", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
+
 
     private void setAssignmentsBtn(){
         myAssignmentsBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(HomePage.this, CourseListActivity.class);
-                intent.putExtra("source", "assignments");
-                intent.putExtra("ID",studentId);
-                startActivity(intent);
+                if (classNum != null && classBranch != null) {
+                    Intent intent = new Intent(HomePage.this, CourseListActivity.class);
+                    intent.putExtra("source", "assignments");
+                    intent.putExtra("ID", studentId);
+                    intent.putExtra("CLASS", classNum);
+                    intent.putExtra("BRANCH", classBranch);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(HomePage.this, "Please wait, loading student info...", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -161,7 +176,7 @@ public class HomePage extends AppCompatActivity {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
-                headers.put("Authorization", "Bearer " + MainActivity.token);
+                headers.put("Authorization", "Bearer " + Token);
                 return headers;
             }
         };
