@@ -1,0 +1,226 @@
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/gradient_background"
+    tools:context=".UpdateTY">
+
+    <!-- Back Button and Title (unchanged) -->
+
+    <ImageView
+        android:id="@+id/back_button"
+        android:layout_width="34dp"
+        android:layout_height="39dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginTop="11dp"
+        android:layout_marginEnd="98dp"
+        android:layout_marginBottom="11dp"
+        android:contentDescription="Back"
+        android:src="@drawable/backk"
+        app:layout_constraintBottom_toTopOf="@+id/card1"
+        app:layout_constraintEnd_toStartOf="@+id/title_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="103dp"
+        android:layout_marginBottom="4dp"
+        android:fontFamily="@font/dam"
+        android:text="Update Year-Term"
+        android:textColor="#3fa9d1"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toTopOf="@+id/card1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/back_button"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Card 1: Create Year -->
+
+    <!-- Card 2: Create Term -->
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card1"
+        android:layout_width="0dp"
+        android:layout_height="322dp"
+        android:layout_marginStart="11dp"
+        android:layout_marginEnd="11dp"
+        android:layout_marginBottom="353dp"
+        android:backgroundTint="@color/white"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/back_button">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                style="@style/BasicText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Update Year"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/year1_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/edittext_background" />
+
+
+            <EditText
+                android:id="@+id/year_start_date"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/edittext_background"
+                android:focusable="false"
+                android:hint="Start Date"
+                android:inputType="date" />
+
+            <EditText
+                android:id="@+id/year_end_date"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/edittext_background"
+                android:focusable="false"
+                android:hint="End Date"
+                android:inputType="date" />
+
+            <Spinner
+                android:id="@+id/year_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="43dp"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/edittext_background" />
+
+            <android.widget.Button
+
+                android:id="@+id/createYbtn"
+                android:layout_width="132dp"
+                android:layout_height="35dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/button_rounded_light"
+                android:text="Update"
+                android:textAllCaps="false"
+                android:textColor="#FFFFFF" />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card2"
+        android:layout_width="0dp"
+        android:layout_height="327dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="@color/white"
+        app:cardCornerRadius="16dp"
+        app:cardElevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/card1">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    style="@style/BasicText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Update Term"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <Spinner
+                    android:id="@+id/term_year_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/edittext_background" />
+
+                <Spinner
+                    android:id="@+id/term_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/edittext_background" />
+
+                <EditText
+                    android:id="@+id/term_start_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/edittext_background"
+                    android:focusable="false"
+                    android:hint="Start Date"
+                    android:inputType="date" />
+
+                <EditText
+                    android:id="@+id/term_end_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginBottom="4dp"
+                    android:background="@drawable/edittext_background"
+                    android:focusable="false"
+                    android:hint="End Date"
+                    android:inputType="date" />
+
+                <Spinner
+                    android:id="@+id/term_type_spinner"
+                    android:layout_width="match_parent"
+                    android:layout_height="43dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:background="@drawable/edittext_background" />
+
+                <android.widget.Button
+
+                    android:id="@+id/createTbtn"
+                    android:layout_width="132dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="4dp"
+                    android:background="@drawable/button_rounded_light"
+                    android:text="Update"
+                    android:textAllCaps="false"
+                    android:textColor="#FFFFFF" />
+            </LinearLayout>
+        </ScrollView>
+
+    </androidx.cardview.widget.CardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

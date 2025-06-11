@@ -3,6 +3,7 @@ package com.example.project_school;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -115,6 +116,7 @@ public class Profile extends AppCompatActivity {
     private void updateProfileInDatabase(int userId, String name, String email, String password, String phone) {
         String url = getString(R.string.URL) + "users/update.php";
 
+        // Prepare JSON body
         JSONObject body = new JSONObject();
         try {
             body.put("user_id", userId);
@@ -122,23 +124,47 @@ public class Profile extends AppCompatActivity {
             body.put("email", email);
             body.put("password", password);
             body.put("phone", phone);
-            body.put("date_of_birth", prefs.getString("date_of_birth", "").equals("null")? null : prefs.getString("date_of_birth", ""));
-        } catch (Exception e) {
+
+            String dob = prefs.getString("date_of_birth", "");
+            if (!dob.equals("null") && !dob.isEmpty()) {
+                body.put("date_of_birth", dob);
+            } else {
+                body.put("date_of_birth", JSONObject.NULL);
+            }
+        } catch (JSONException e) {
             e.printStackTrace();
+            Toast.makeText(Profile.this, "Failed to prepare request", Toast.LENGTH_SHORT).show();
+            return;
         }
 
+        // Create request
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.PUT, url, body,
                 response -> {
                     try {
-                        boolean success = response.getBoolean("success");
-                        if (success) {
-                            Toast.makeText(Profile.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+                        Log.d("API_RESPONSE", response.toString()); // Optional debug log
+
+                        if (response.has("success")) {
+                            boolean success = response.getBoolean("success");
+                            if (success) {
+                                Toast.makeText(Profile.this, "Profile updated successfully!", Toast.LENGTH_SHORT).show();
+                            } else {
+                                String msg = response.optString("message", "Update failed. Try again.");
+                                Toast.makeText(Profile.this, msg, Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (response.has("status")) {
+                            String status = response.getString("status");
+                            String message = response.optString("message", "No message");
+                            if (status.equalsIgnoreCase("success")) {
+                                Toast.makeText(Profile.this, message, Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(Profile.this, "Update failed: " + message, Toast.LENGTH_SHORT).show();
+                            }
                         } else {
-                            Toast.makeText(Profile.this, "Update failed. Try again.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Profile.this, "Unexpected response format", Toast.LENGTH_SHORT).show();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
-                        Toast.makeText(Profile.this, "Unexpected response", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(Profile.this, "Error parsing response", Toast.LENGTH_SHORT).show();
                     }
                 },
                 error -> {
@@ -154,7 +180,9 @@ public class Profile extends AppCompatActivity {
             }
         };
 
+        // Add to queue
         Volley.newRequestQueue(this).add(request);
     }
+
 
 }

@@ -1,6 +1,7 @@
 package com.example.project_school;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -28,7 +29,7 @@ public class YearTerm extends AppCompatActivity {
 
     EditText yearStart, yearEnd, termStart, termEnd;
     Spinner isCurrentSpinner, yearSelectSpinner, termTypeSpinner;
-    Button createYearBtn, createTermBtn;
+    Button createYearBtn, createTermBtn,update;
     int createdYearId = -1;
     String yearName = "";
 
@@ -50,6 +51,12 @@ public class YearTerm extends AppCompatActivity {
         isCurrentSpinner = findViewById(R.id.year_spinner);
         yearSelectSpinner = findViewById(R.id.term_year_spinner);
         termTypeSpinner = findViewById(R.id.term_type_spinner);
+
+        update = findViewById(R.id.updatebtn);
+        update.setOnClickListener(v -> {
+            Intent intent = new Intent(YearTerm.this, UpdateTY.class);
+            startActivity(intent);
+        });
 
         // Static options for is_current spinner
         ArrayAdapter<String> currentAdapter = new ArrayAdapter<>(this,
