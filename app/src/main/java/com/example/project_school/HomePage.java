@@ -34,9 +34,8 @@ public class HomePage extends AppCompatActivity {
     private Button myAbsencesBtn,myAssignmentsBtn,myMarksBtn,mySchduleBtn,myCalendarBtn;
     private TextView txtClassNum,txtStudentName;
     String studentId,studentName;
-    String classNum,classBranch;
-    ImageView logoutButton,profilebtn;
     String classNum,classBranch,Token;
+    ImageView logoutButton,profilebtn;
     SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {

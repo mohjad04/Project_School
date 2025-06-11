@@ -44,26 +44,11 @@ public class AssignmentActivity extends AppCompatActivity {
 
         noAssignmentText = findViewById(R.id.no_assignment_text);
         recyclerView = findViewById(R.id.assignmentRecycler);
-
-
-
-
-
-
-
-
-
-
-
         toolbarAssignment = findViewById(R.id.toolbarAssignment);
         setSupportActionBar(toolbarAssignment);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
-
-
-
-
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
@@ -86,13 +71,12 @@ public class AssignmentActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             Intent intent = new Intent(AssignmentActivity.this, CourseListActivity.class);
-            // يمكنك إضافة البيانات التي تريد إرجاعها
             intent.putExtra("ID", studentId);
             intent.putExtra("term_id", termId);
             intent.putExtra("course_id", courseId);
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
             startActivity(intent);
-            finish(); // حتى لا يرجع لـ AssignmentActivity لما تضغط رجوع في CourseListActivity
+            finish();
             return true;
         }
         return super.onOptionsItemSelected(item);

@@ -122,6 +122,7 @@ public class Profile extends AppCompatActivity {
             body.put("email", email);
             body.put("password", password);
             body.put("phone", phone);
+            body.put("date_of_birth", prefs.getString("date_of_birth", "").equals("null")? null : prefs.getString("date_of_birth", ""));
         } catch (Exception e) {
             e.printStackTrace();
         }
