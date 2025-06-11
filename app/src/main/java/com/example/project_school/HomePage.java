@@ -36,6 +36,8 @@ public class HomePage extends AppCompatActivity {
     String studentId,studentName;
     String classNum,classBranch;
     ImageView logoutButton,profilebtn;
+    String classNum,classBranch,Token;
+    SharedPreferences sharedPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,7 +51,11 @@ public class HomePage extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        sharedPreferences = getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
+          Token=sharedPreferences.getString("auth_token", "");
         setupViews();
+        fetchStudentClassInfo(studentId);
         setScheduleBtn();
         setMarksBtn();
         setAssignmentsBtn();
@@ -86,10 +92,20 @@ public class HomePage extends AppCompatActivity {
         });
     }
 
-    private void setMarksBtn(){
-        myMarksBtn.setOnClickListener(new View.OnClickListener(){
+    private void setMarksBtn() {
+        myMarksBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (classNum != null && classBranch != null) {
+                    Intent intent = new Intent(HomePage.this, CourseListActivity.class);
+                    intent.putExtra("source", "grades");
+                    intent.putExtra("ID", studentId);
+                    intent.putExtra("CLASS", classNum);
+                    intent.putExtra("BRANCH", classBranch);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(HomePage.this, "Please wait, loading student info...", Toast.LENGTH_SHORT).show();
+                }
                 Intent intent1 = new Intent(HomePage.this, CourseListActivity.class);
                 intent1.putExtra("source", "grades");
                 intent1.putExtra("ID",studentId);
@@ -101,10 +117,21 @@ public class HomePage extends AppCompatActivity {
         });
     }
 
+
     private void setAssignmentsBtn(){
         myAssignmentsBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
+                if (classNum != null && classBranch != null) {
+                    Intent intent = new Intent(HomePage.this, CourseListActivity.class);
+                    intent.putExtra("source", "assignments");
+                    intent.putExtra("ID", studentId);
+                    intent.putExtra("CLASS", classNum);
+                    intent.putExtra("BRANCH", classBranch);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(HomePage.this, "Please wait, loading student info...", Toast.LENGTH_SHORT).show();
+                }
                 Intent intent2 = new Intent(HomePage.this, CourseListActivity.class);
                 intent2.putExtra("source", "assignments");
                 intent2.putExtra("ID",studentId);
@@ -193,7 +220,7 @@ public class HomePage extends AppCompatActivity {
             public Map<String, String> getHeaders() throws AuthFailureError {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("Content-Type", "application/json");
-                headers.put("Authorization", "Bearer " + MainActivity.token);
+                headers.put("Authorization", "Bearer " + Token);
                 return headers;
             }
         };

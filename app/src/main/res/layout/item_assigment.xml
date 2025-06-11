@@ -22,7 +22,6 @@
             android:textSize="18sp"
             android:textColor="#3fa9d1"
             android:textStyle="bold"
-            android:fontFamily="@font/dam"
             android:layout_marginBottom="4dp" />
 
 
