@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- res/layout/activity_course_details.xml -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/gradient_background"
-    android:orientation="vertical"
-   >
+    android:orientation="vertical">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarMarks"
@@ -17,26 +16,61 @@
         app:title="Marks"
         app:titleMarginStart="100dp"
         app:titleTextAppearance="@style/ToolbarTitleBold"
-        app:titleTextColor="#3fa9d1"
-        />
+        app:titleTextColor="#3fa9d1" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp">
+
+        <ProgressBar
+            android:id="@+id/total_grade_chart"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="160dp"
+            android:layout_height="160dp"
+            android:indeterminate="false"
+            android:max="100"
+            android:progress="0"
+            android:progressDrawable="@drawable/circular_progress_drawable"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:progress="75" />
+
+        <TextView
+            android:id="@+id/total_grade_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#0D47A1"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="@+id/total_grade_chart"
+            app:layout_constraintEnd_toEndOf="@+id/total_grade_chart"
+            app:layout_constraintStart_toStartOf="@+id/total_grade_chart"
+            app:layout_constraintTop_toTopOf="@+id/total_grade_chart"
+            tools:text="36.5 / 40.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <ListView
         android:id="@+id/listGrades"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         android:divider="@android:color/transparent"
         android:dividerHeight="8dp"
-        android:layout_marginTop="8dp"
         android:padding="8dp" />
 
     <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/txtContent"
-        android:layout_gravity="center"
-        />
-
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="16dp"
+        android:textSize="16sp"
+        android:visibility="gone" />
 
 </LinearLayout>

@@ -35,15 +35,17 @@ public class HomePage extends AppCompatActivity {
     private TextView txtClassNum,txtStudentName;
     String studentId,studentName;
     String classNum,classBranch,Token;
-    ImageView logoutButton,profilebtn;
     SharedPreferences sharedPreferences;
+
+    ImageView logoutButton,profilebtn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
 
-       Intent intent = getIntent();
-       studentId = intent.getStringExtra("ID");
+        Intent intent = getIntent();
+        studentId = intent.getStringExtra("ID");
         setContentView(R.layout.activity_home_page);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
@@ -52,7 +54,7 @@ public class HomePage extends AppCompatActivity {
         });
 
         sharedPreferences = getSharedPreferences(MainActivity.PREFS_NAME, MODE_PRIVATE);
-          Token=sharedPreferences.getString("auth_token", "");
+        Token=sharedPreferences.getString("auth_token", "");
         setupViews();
         fetchStudentClassInfo(studentId);
         setScheduleBtn();
@@ -62,7 +64,6 @@ public class HomePage extends AppCompatActivity {
         setCalendarBtn();
         setLogoutButton();
         setProfilebtn();
-        fetchStudentClassInfo(studentId);
 
 
     }
@@ -105,13 +106,6 @@ public class HomePage extends AppCompatActivity {
                 } else {
                     Toast.makeText(HomePage.this, "Please wait, loading student info...", Toast.LENGTH_SHORT).show();
                 }
-                Intent intent1 = new Intent(HomePage.this, CourseListActivity.class);
-                intent1.putExtra("source", "grades");
-                intent1.putExtra("ID",studentId);
-                intent1.putExtra("CLASS",classNum);
-                intent1.putExtra("BRANCH",classBranch);
-                startActivity(intent1);
-
             }
         });
     }
@@ -131,10 +125,6 @@ public class HomePage extends AppCompatActivity {
                 } else {
                     Toast.makeText(HomePage.this, "Please wait, loading student info...", Toast.LENGTH_SHORT).show();
                 }
-                Intent intent2 = new Intent(HomePage.this, CourseListActivity.class);
-                intent2.putExtra("source", "assignments");
-                intent2.putExtra("ID",studentId);
-                startActivity(intent2);
             }
         });
     }
@@ -143,10 +133,10 @@ public class HomePage extends AppCompatActivity {
         myAbsencesBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent3 = new Intent(HomePage.this,StudentAttendanceReportActivity.class);
+                Intent intent = new Intent(HomePage.this,StudentAttendanceReportActivity.class);
                 // intent.putExtra("NAME",userName);
 
-                startActivity(intent3);
+                startActivity(intent);
             }
         });
     }
@@ -156,38 +146,13 @@ public class HomePage extends AppCompatActivity {
         myCalendarBtn.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                Intent intent4 = new Intent(HomePage.this,AssessmentsCalendar.class);
+                Intent intent = new Intent(HomePage.this,AssessmentsCalendar.class);
                 // intent.putExtra("NAME",userName);
 
-                startActivity(intent4);
+                startActivity(intent);
             }
         });
     }
-
-    private void setLogoutButton(){
-        logoutButton.setOnClickListener(v -> {
-            // Clear shared preferences
-            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear(); // Remove all stored user info
-            editor.apply();
-
-            // Redirect to LoginActivity
-            Intent intent5 = new Intent(HomePage.this, MainActivity.class);
-            intent5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear activity stack
-            startActivity(intent5);
-
-            Toast.makeText(HomePage.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
-        });
-    }
-
-    private void setProfilebtn() {
-        profilebtn.setOnClickListener(v -> {
-            Intent intent6 = new Intent(HomePage.this, Profile.class);
-            startActivity(intent6);
-        });
-    }
-
 
     private void fetchStudentClassInfo(String studentId) {
         String url = getString(R.string.URL) + "students/list.php?student_id=" + studentId;
@@ -225,6 +190,32 @@ public class HomePage extends AppCompatActivity {
         };
 
         queue.add(request);
+    }
+
+
+    private void setLogoutButton(){
+        logoutButton.setOnClickListener(v -> {
+            // Clear shared preferences
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear(); // Remove all stored user info
+            editor.apply();
+
+            // Redirect to LoginActivity
+            Intent intent5 = new Intent(HomePage.this, MainActivity.class);
+            intent5.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear activity stack
+            startActivity(intent5);
+
+            Toast.makeText(HomePage.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+
+    private void setProfilebtn() {
+        profilebtn.setOnClickListener(v -> {
+            Intent intent6 = new Intent(HomePage.this, Profile.class);
+            startActivity(intent6);
+        });
     }
 
 
