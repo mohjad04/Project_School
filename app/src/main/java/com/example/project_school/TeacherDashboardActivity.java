@@ -117,7 +117,17 @@ public class TeacherDashboardActivity extends AppCompatActivity {
             // Clear shared preferences
             SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.clear(); // Remove all stored user info
+            editor.remove("auth_token");
+            editor.remove("user_id");
+            editor.remove("role");
+            editor.remove("name");
+            editor.remove("email");
+            editor.remove("password");
+            editor.remove("phone");
+            editor.remove("date_of_birth");
+            editor.remove("user_image");
+            editor.remove("current_term");
+            editor.remove("current_year");
             editor.apply();
 
             // Redirect to LoginActivity

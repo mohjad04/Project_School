@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -42,7 +43,10 @@ public class MainActivity extends AppCompatActivity {
     private SharedPreferences sharedPreferences;
     private SharedPreferences.Editor editor;
 
+    private CheckBox rememberMe;
+
     public static final String PREFS_NAME = "MyPrefs";
+    private boolean loginSuccessful = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +59,19 @@ public class MainActivity extends AppCompatActivity {
         login = findViewById(R.id.loginButton);
         username = findViewById(R.id.username);
         password = findViewById(R.id.password);
+        rememberMe = findViewById(R.id.rememberMe);
         queue = Volley.newRequestQueue(this);
+
+        // Prefill saved credentials
+        boolean isRemembered = sharedPreferences.getBoolean("remember_me", false);
+        if (isRemembered) {
+            String savedUser = sharedPreferences.getString("saved_user", "");
+            String savedPass = sharedPreferences.getString("saved_pass", "");
+            username.setText(savedUser);
+            password.setText(savedPass);
+            rememberMe.setChecked(true);
+        }
+
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
                                 String role = userObj.getString("role");
 
                                 MainActivity.token = data.getString("token");
+                                loginSuccessful = true;
 
                                 editor.putString("auth_token", MainActivity.token);
                                 editor.putInt("user_id", userObj.getInt("user_id"));
@@ -99,6 +116,16 @@ public class MainActivity extends AppCompatActivity {
                                                 JSONObject termObj = dataArray.getJSONObject(0);
                                                 editor.putInt("current_term", termObj.getInt("term_id"));
                                                 editor.putInt("current_year", termObj.getInt("year_id"));
+                                                if (rememberMe.isChecked()) {
+                                                    editor.putBoolean("remember_me", true);
+                                                    editor.putString("saved_user", user);
+                                                    editor.putString("saved_pass", pass);
+                                                } else {
+                                                    editor.remove("remember_me");
+                                                    editor.remove("saved_user");
+                                                    editor.remove("saved_pass");
+                                                }
+
                                                 editor.apply();
 
                                                 Intent intent;
