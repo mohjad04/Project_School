@@ -83,6 +83,10 @@
         <activity
             android:name=".MarkAttendance"
             android:exported="false" />
+        <activity android:name=".AddTeacher2"
+            android:exported="false" />
+        <activity android:name=".TeacherInfo"
+            android:exported="false" />
         <activity
             android:name=".ReportAttendance"
             android:exported="false" />
