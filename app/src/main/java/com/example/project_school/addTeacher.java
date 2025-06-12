@@ -44,7 +44,28 @@ public class addTeacher extends AppCompatActivity {
         queue = Volley.newRequestQueue(this);
 
         // Setup subject spinner (example list)
-        String[] subjects = {"Math", "Science", "English", "History"};
+        String[] subjects = {
+                "Mathematics",
+                "Science",
+                "English",
+                "Arabic",
+                "Social Studies",
+                "Islamic Education",
+
+                // Grade 11 Scientific
+                "Physics",
+                "Chemistry",
+                "Biology",
+                "Advanced Mathematics",
+                "Computer Science",
+
+                // Grade 11 Literary
+                "History",
+                "Geography",
+                "Philosophy",
+                "Arabic Literature",
+                "Sociology"
+        };
         ArrayAdapter<String> subjectAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item, subjects);
         subjectAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
