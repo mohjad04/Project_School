@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity {
                                 editor.putString("password", userObj.getString("password"));
                                 editor.putString("phone", userObj.getString("phone"));
                                 editor.putString("date_of_birth", userObj.getString("date_of_birth"));
+                                editor.putString("user_image", userObj.getString("user_image"));
 
                                 // GET current term
                                 JsonObjectRequest termRequest = new JsonObjectRequest(Request.Method.GET, getString(R.string.URL) + "terms/list.php?is_current=1", null,

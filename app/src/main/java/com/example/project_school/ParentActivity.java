@@ -58,6 +58,7 @@ public class ParentActivity extends AppCompatActivity implements StudentAdapter.
     private int termID, yearID;
     private String authToken;
     private SharedPreferences sharedPreferences;
+    private ImageView logoutButton,profilebtn;
 
     private int parentId;
 
@@ -91,6 +92,8 @@ public class ParentActivity extends AppCompatActivity implements StudentAdapter.
         retryButton = findViewById(R.id.retryButton);
         emptyStateIcon = findViewById(R.id.emptyStateIcon);
         errorStateIcon = findViewById(R.id.errorStateIcon);
+        logoutButton = findViewById(R.id.logoutbtn);
+        profilebtn = findViewById(R.id.profilebtn);
     }
 
     private void setupRecyclerView() {
@@ -110,6 +113,26 @@ public class ParentActivity extends AppCompatActivity implements StudentAdapter.
         swipeRefreshLayout.setOnRefreshListener(() -> loadStudents(true));
 
         retryButton.setOnClickListener(v -> loadStudents(false));
+
+        logoutButton.setOnClickListener(v -> {
+            // Clear shared preferences
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear(); // Remove all stored user info
+            editor.apply();
+
+            // Redirect to LoginActivity
+            Intent intent = new Intent(ParentActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear activity stack
+            startActivity(intent);
+
+            Toast.makeText(ParentActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+        });
+
+        profilebtn.setOnClickListener(v -> {
+            Intent intent = new Intent(ParentActivity.this, Profile.class);
+            startActivity(intent);
+        });
     }
 
     private void initVolley() {

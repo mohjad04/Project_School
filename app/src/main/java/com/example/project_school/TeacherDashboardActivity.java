@@ -9,8 +9,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.GridLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -49,6 +51,8 @@ public class TeacherDashboardActivity extends AppCompatActivity {
     private Spinner courseSpinner;
 
     private Button loadStudentsBtn, markAttendanceBtn, reportAttendanceBtn;
+    private ImageView logoutButton, profilebtn;
+    private TextView nametxt, typetxt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +82,11 @@ public class TeacherDashboardActivity extends AppCompatActivity {
         markAttendanceBtn = findViewById(R.id.mark_attendance);
         reportAttendanceBtn = findViewById(R.id.report_attendance);
 
+        logoutButton = findViewById(R.id.logoutbtn);
+        profilebtn = findViewById(R.id.profilebtn);
 
+        nametxt = findViewById(R.id.nametxt);
+        typetxt = findViewById(R.id.typetxt);
     }
 
     private void setupUI() {
@@ -104,6 +112,45 @@ public class TeacherDashboardActivity extends AppCompatActivity {
             Intent intent = new Intent(TeacherDashboardActivity.this, ReportAttendance.class);
             startActivity(intent);
         });
+
+        logoutButton.setOnClickListener(v -> {
+            // Clear shared preferences
+            SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear(); // Remove all stored user info
+            editor.apply();
+
+            // Redirect to LoginActivity
+            Intent intent = new Intent(TeacherDashboardActivity.this, MainActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK); // Clear activity stack
+            startActivity(intent);
+
+            Toast.makeText(TeacherDashboardActivity.this, "Logged out successfully", Toast.LENGTH_SHORT).show();
+        });
+
+        profilebtn.setOnClickListener(v -> {
+            Intent intent = new Intent(TeacherDashboardActivity.this, Profile.class); // Change to your profile activity
+            startActivity(intent);
+        });
+
+        nametxt.setText(sharedPreferences.getString("name", ""));
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.GET, BASE_URL + "classes/list.php?teacher_id=" + teacherId, null,
+                response -> {
+                JSONArray dataArray = response.optJSONArray("data");
+                String type= dataArray.optJSONObject(0).optString("class_num") + " " + dataArray.optJSONObject(0).optString("class_branch");
+                typetxt.setText("Teacher for: " + type);
+                },
+                error -> {
+                    Toast.makeText(TeacherDashboardActivity.this, error.toString(), Toast.LENGTH_SHORT).show();
+                }) {
+            @Override
+            public Map<String, String> getHeaders() {
+                Map<String, String> headers = new HashMap<>();
+                headers.put("Authorization", "Bearer " + authToken);
+                return headers;
+            }
+        };
+        requestQueue.add(request);
 
         setupGridClickListeners();
     }

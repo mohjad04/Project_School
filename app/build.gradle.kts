@@ -41,6 +41,9 @@ dependencies {
     implementation(libs.guava)
     implementation(libs.firebase.crashlytics.buildtools)
     implementation(libs.swiperefreshlayout)
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.ext.junit)
     androidTestImplementation(libs.espresso.core)
